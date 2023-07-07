@@ -1,0 +1,10 @@
+﻿global using System;
+global using System.Threading.Tasks;
+global using Flare.Services;
+global using Discord;
+global using Discord.WebSocket;
+global using System.Windows.Input;
+global using System.Windows;
+global using Newtonsoft.Json.Linq;
+global using System.IO;
+global using Discord.Commands;

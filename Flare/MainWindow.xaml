@@ -94,6 +94,7 @@
             </Grid>
         </Grid>
         <Label x:Name="FlareBuildInformation" Content="Flare" HorizontalAlignment="Left" Height="26" Margin="10,398,0,0" VerticalAlignment="Top" Width="790" Foreground="#FF969696"/>
+        <Label x:Name="FlareOutput" Content="Flare will output debug information here." HorizontalAlignment="Center" Height="60" Margin="0,333,0,0" VerticalAlignment="Top" Width="738" Foreground="#FF969696" FontSize="34"/>
 
     </Grid>
 </Window>
