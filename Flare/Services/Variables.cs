@@ -6,7 +6,5 @@ namespace Flare.Services
     {
         public static DiscordSocketClient DiscordClient = null!;
         public static CommandService ClientCommandService = null!;
-        public static MainWindow @MainWindow = null!;
-        public static Label FlareLoggingLabel = null!;
     }
 }

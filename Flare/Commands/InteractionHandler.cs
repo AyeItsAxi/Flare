@@ -11,6 +11,9 @@ public static class InteractionHandler
                 case "ping":
                     await CommandLogic.PingCommand.RunCommandLogic(message);
                     break;
+                case "cat":
+                    await CommandLogic.CatCommand.RunCommandLogic(message);
+                    break;
             }
         }
     }

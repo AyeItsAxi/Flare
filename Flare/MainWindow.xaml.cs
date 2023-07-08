@@ -1,6 +1,6 @@
 ﻿namespace Flare
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
         // Flare (Prod): 
         // Flare (Development): https://discord.com/api/oauth2/authorize?client_id=1126807945599008768&permissions=8&scope=bot
@@ -16,8 +16,6 @@
             await CheckIsNewCompile();
             await ClearLog();
             await InitiateDiscordAuthflow();
-            Variables.MainWindow = this;
-            Variables.FlareLoggingLabel = FlareOutput;
         }
 
         private async Task CheckIsNewCompile()
