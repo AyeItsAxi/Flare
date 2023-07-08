@@ -8,3 +8,4 @@ global using System.Windows;
 global using Newtonsoft.Json.Linq;
 global using System.IO;
 global using Discord.Commands;
+global using System.Net;
