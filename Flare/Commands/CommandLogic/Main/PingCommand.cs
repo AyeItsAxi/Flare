@@ -1,4 +1,4 @@
-﻿namespace Flare.Commands.CommandLogic;
+﻿namespace Flare.Commands.CommandLogic.Main;
 
 public static class PingCommand
 {

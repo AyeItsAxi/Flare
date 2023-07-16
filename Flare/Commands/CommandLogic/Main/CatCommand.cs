@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace Flare.Commands.CommandLogic;
+﻿namespace Flare.Commands.CommandLogic.Main;
 
 public static class CatCommand
 {

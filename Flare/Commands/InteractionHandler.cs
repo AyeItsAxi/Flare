@@ -27,6 +27,16 @@ public static class InteractionHandler
 
                     await CommandLogic.Main.AvatarCommand.RunCommandLogic(message, message.Author);
                     break;
+                case "kick":
+                    if (message.MentionedUsers.Count == 0) { await message.Channel.SendMessageAsync("Please specify (@mention) a user to ban."); break; }
+                    var kickReason = "Very responsible moderator, no reason provided.";
+                    if (!string.IsNullOrWhiteSpace(command.Split('>')[1])) { kickReason = command.Split('>')[1]; }
+                    await CommandLogic.Moderation.KickCommand.RunCommandLogic(
+                        message, 
+                        message.MentionedUsers.First(),
+                        kickReason
+                        );
+                    break;
             }
         }
     }
