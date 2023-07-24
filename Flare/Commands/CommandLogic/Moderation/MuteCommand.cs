@@ -1,12 +1,10 @@
-﻿using System.Windows.Media;
+﻿namespace Flare.Commands.CommandLogic.Moderation;
 using Discord.Interactions;
 using Color = Discord.Color;
 
-namespace Flare.Commands.CommandLogic.Moderation;
-
-public class KickCommand : InteractionModuleBase<SocketInteractionContext>
+public class MuteCommand : InteractionModuleBase<SocketInteractionContext>
 {
-    public static async Task RunCommandLogic(SocketMessage message, SocketUser targetUser, string reason)
+    public static async Task RunCommandLogic(SocketMessage message, SocketUser targetUser, string duration)
     {
         try
         {
@@ -16,7 +14,7 @@ public class KickCommand : InteractionModuleBase<SocketInteractionContext>
             {
                 var responseEmbed = new EmbedBuilder()
                     .WithTitle("Missing Permissions!")
-                    .WithDescription("You must have the \"MANAGE_MESSAGES\" permission in order to kick people")
+                    .WithDescription("You must have the \"MANAGE_MESSAGES\" permission in order to mute people")
                     .WithColor(Color.Red)
                     .Build();
                 await message.Channel.SendMessageAsync("", false, responseEmbed);
@@ -26,25 +24,26 @@ public class KickCommand : InteractionModuleBase<SocketInteractionContext>
             if (targetUserAsSocketGuildUser.GuildPermissions.Has(GuildPermission.ManageMessages))
             {
                 var permissionsTooHighEmbed = new EmbedBuilder()
-                    .WithTitle("You do not have permission to kick that member!")
-                    .WithDescription("The target user has the \"MANAGE_MESSAGES\" permission and cannot be kicked.")
+                    .WithTitle("You do not have permission to mute that member!")
+                    .WithDescription("The target user has the \"MANAGE_MESSAGES\" permission and cannot be muted.")
                     .WithColor(Color.Red)
                     .Build();
                 await message.Channel.SendMessageAsync("", false, permissionsTooHighEmbed);
                 return;
             }
 
-            await targetUserAsSocketGuildUser.KickAsync(reason);
+            await targetUserAsSocketGuildUser.SetTimeOutAsync(TimeSpan.Parse(duration));
+
             var successEmbed = new EmbedBuilder()
-                .WithTitle($"Successfully kicked {targetUser.Username}")
-                .WithFooter($"Kicked by {message.Author.Username}")
+                .WithTitle($"Successfully muted {targetUser.Username}")
+                .WithFooter($"Muted by {message.Author.Username}")
                 .WithColor(Color.Green)
                 .Build();
             await message.Channel.SendMessageAsync("", false, successEmbed);
         }
         catch
         {
-            await message.Channel.SendMessageAsync("Please make sure to specify (@mention) a valid user.");
+            await message.Channel.SendMessageAsync("Please make sure to specify (@mention) a valid user to mute and a duration. Mutes should look like `f!mute @User 5m`.");
         }
     }
 }
