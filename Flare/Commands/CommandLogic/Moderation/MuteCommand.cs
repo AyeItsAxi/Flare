@@ -1,4 +1,6 @@
-﻿namespace Flare.Commands.CommandLogic.Moderation;
+﻿using System.Globalization;
+
+namespace Flare.Commands.CommandLogic.Moderation;
 using Discord.Interactions;
 using Color = Discord.Color;
 
@@ -31,8 +33,17 @@ public class MuteCommand : InteractionModuleBase<SocketInteractionContext>
                 await message.Channel.SendMessageAsync("", false, permissionsTooHighEmbed);
                 return;
             }
-
-            await targetUserAsSocketGuildUser.SetTimeOutAsync(TimeSpan.Parse(duration));
+            
+            //scuffed but works so wtvr
+            TimeSpan muteDuration = duration.Substring(duration.Length - 1) switch
+            {
+                "m" => TimeSpan.FromMinutes(Double.Parse(duration.Split('m')[0])),
+                "h" => TimeSpan.FromHours(Double.Parse(duration.Split('h')[0])),
+                "d" => TimeSpan.FromDays(Double.Parse(duration.Split('d')[0])),
+                "w" => TimeSpan.FromDays(Double.Parse(duration.Split('w')[0]) * 7),
+                _ => TimeSpan.FromMinutes(1)
+            };
+            await targetUserAsSocketGuildUser.SetTimeOutAsync(muteDuration);
 
             var successEmbed = new EmbedBuilder()
                 .WithTitle($"Successfully muted {targetUser.Username}")
@@ -41,9 +52,15 @@ public class MuteCommand : InteractionModuleBase<SocketInteractionContext>
                 .Build();
             await message.Channel.SendMessageAsync("", false, successEmbed);
         }
-        catch
+        catch (Exception ex)
         {
-            await message.Channel.SendMessageAsync("Please make sure to specify (@mention) a valid user to mute and a duration. Mutes should look like `f!mute @User 5m`.");
+            var failEmbed = new EmbedBuilder()
+                .WithTitle($"Failed to unmute {targetUser.Username}!")
+                .WithDescription($"Exception: {ex}")
+                .WithFooter($"Failed at {DateTime.Now}")
+                .WithColor(Color.Red)
+                .Build();
+            await message.Channel.SendMessageAsync("", false, failEmbed);
         }
     }
 }

@@ -9,13 +9,13 @@ public class UnbanCommand : InteractionModuleBase<SocketInteractionContext>
 {
     public static async Task RunCommandLogic(SocketMessage message, ulong userId)
     {
+        var isUserBanned = false;
         try
         {
             var memberGuildUser = (SocketGuildUser)message.Author;
             var targetUser = DiscordClient.GetUserAsync(userId).Result;
             var b = ((SocketGuildChannel)message.Channel).Guild.GetBansAsync(targetUser, Direction.Around, 1000);
             //this is so scuffed oh my god
-            var isUserBanned = false;
             await foreach (var ban in b)
             {
                 if (ban.Any(restban => restban.User.Id == userId))
