@@ -10,6 +10,7 @@ public static class InteractionHandler
         {
             try
             {
+                var avatarUrl = message.MentionedUsers.Count != 0 ? message.MentionedUsers.First().GetAvatarUrl(ImageFormat.WebP, 4096) : message.Author.GetAvatarUrl(ImageFormat.WebP, 4096);
                 switch (command.ToLower().Split(' ')[0])
                 {
                     case "ping":
@@ -35,6 +36,87 @@ public static class InteractionHandler
                         await CommandLogic.Main.DogCommand.RunCommandLogic(message);
                         break;
                     
+                    case "adios":
+                        await CommandLogic.Main.AdiosCommand.RunCommandLogic(message, avatarUrl);
+                        break;
+                    
+                    case "carreverse":
+                        if (message.Content.Length > 13 && !string.IsNullOrWhiteSpace(message.Content.Split(' ')[1]))
+                        {
+                            await CommandLogic.Main.CarReverseCommand.RunCommandLogic(message, message.Content[(message.Content.IndexOf(' ') + 1)..]);
+                            break;
+                        }
+
+                        await message.Channel.SendMessageAsync("Please attach text to the command to process the image.");
+                        break;
+                    
+                    case "drip":
+                        await CommandLogic.Main.DripCommand.RunCommandLogic(message, avatarUrl);
+                        break;
+                    
+                    case "grave":
+                        await CommandLogic.Main.GraveCommand.RunCommandLogic(message, avatarUrl);
+                        break;
+                    
+                    case "heaven":
+                        await CommandLogic.Main.HeavenCommand.RunCommandLogic(message, avatarUrl);
+                        break;
+                    
+                    case "water":
+                        if (message.Content.Length > 8 && !string.IsNullOrWhiteSpace(message.Content.Split(' ')[1]))
+                        {
+                            await CommandLogic.Main.WaterCommand.RunCommandLogic(message, message.Content[(message.Content.IndexOf(' ') + 1)..]);
+                            break;
+                        }
+
+                        await message.Channel.SendMessageAsync("Please attach text to the command to process the image.");
+                        break;
+                    
+                    case "lyrics":
+                        if (message.Content.Length > 9 && !string.IsNullOrWhiteSpace(message.Content.Split(' ')[1]))
+                        {
+                            await CommandLogic.Main.LyricsCommand.RunCommandLogic(message, message.Content[(message.Content.IndexOf(' ') + 1)..]);
+                            break;
+                        }
+
+                        await message.Channel.SendMessageAsync("Please specify a song to find the lyrics of.");
+                        break;
+                    
+                    case "wide":
+                        if (message.Attachments.Count == 0)
+                        {
+                            await message.Channel.SendMessageAsync(
+                                "Please send an image with the command to process the image.");
+                            break;
+                        }
+                        
+                        await CommandLogic.Main.WideCommand.RunCommandLogic(message, message.Attachments.First().Url);
+                        break;
+                    
+                    case "wolverine":
+                        await CommandLogic.Main.WolverineCommand.RunCommandLogic(message, avatarUrl);
+                        break;
+                    
+                    case "sadcat":
+                        if (message.Content.Length > 9 && !string.IsNullOrWhiteSpace(message.Content.Split(' ')[1]))
+                        {
+                            await CommandLogic.Main.SadCatCommand.RunCommandLogic(message, message.Content[(message.Content.IndexOf(' ') + 1)..]);
+                            break;
+                        }
+
+                        await message.Channel.SendMessageAsync("Please attach text to process the image.");
+                        break;
+                    
+                    case "github":
+                        if (message.Content.Length > 9 && !string.IsNullOrWhiteSpace(message.Content.Split(' ')[1]))
+                        {
+                            await CommandLogic.Main.GithubCommand.RunCommandLogic(message, message.Content[(message.Content.IndexOf(' ') + 1)..]);
+                            break;
+                        }
+
+                        await message.Channel.SendMessageAsync("Please specify a Github username to get stats for.");
+                        break;
+
                     case "kick":
                         if (message.MentionedUsers.Count == 0)
                         {
