@@ -1,6 +1,4 @@
-﻿using System.CodeDom;
-
-namespace Flare.Commands.CommandLogic.Moderation;
+﻿namespace Flare.Commands.CommandLogic.Moderation;
 using Discord.Interactions;
 
 public class UnmuteCommand : InteractionModuleBase<SocketInteractionContext>

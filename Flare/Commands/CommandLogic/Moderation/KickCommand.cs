@@ -1,5 +1,4 @@
-﻿using System.Windows.Media;
-using Discord.Interactions;
+﻿using Discord.Interactions;
 using Color = Discord.Color;
 
 namespace Flare.Commands.CommandLogic.Moderation;

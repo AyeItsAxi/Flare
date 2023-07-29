@@ -30,6 +30,11 @@ public static class InteractionHandler
 
                         await CommandLogic.Main.AvatarCommand.RunCommandLogic(message, message.Author);
                         break;
+                    
+                    case "dog":
+                        await CommandLogic.Main.DogCommand.RunCommandLogic(message);
+                        break;
+                    
                     case "kick":
                         if (message.MentionedUsers.Count == 0)
                         {
@@ -49,6 +54,7 @@ public static class InteractionHandler
                             kickReason
                         );
                         break;
+                    
                     case "ban":
                         if (message.MentionedUsers.Count == 0)
                         {
@@ -68,6 +74,7 @@ public static class InteractionHandler
                             banReason
                         );
                         break;
+                    
                     case "mute":
                         if (message.MentionedUsers.Count == 0)
                         {
@@ -87,6 +94,7 @@ public static class InteractionHandler
                             muteDuration
                         );
                         break;
+                    
                     case "unban":
                         if (message.Content.Length > 7 && string.IsNullOrWhiteSpace(message.Content.Split(' ')[1]))
                         {
@@ -106,6 +114,7 @@ public static class InteractionHandler
                         await message.Channel.SendMessageAsync(
                             "Please specify the ID of a user to unban. Correct formatting is `f!unban 756164525035749529`.");
                         break;
+                    
                     case "unmute":
                         if (message.MentionedUsers.Count == 0)
                         {
@@ -117,6 +126,16 @@ public static class InteractionHandler
                             message,
                             message.MentionedUsers.First()
                         );
+                        break;
+                    
+                    case "purge":
+                        if (command.Length > 6 && !string.IsNullOrWhiteSpace(message.Content.Split(' ')[1]))
+                        {
+                            await CommandLogic.Moderation.PurgeCommand.RunCommandLogic(message, int.Parse(message.Content.Split(' ')[1]));
+                            break;
+                        }
+
+                        await CommandLogic.Moderation.PurgeCommand.RunCommandLogic(message);
                         break;
                 }
             }

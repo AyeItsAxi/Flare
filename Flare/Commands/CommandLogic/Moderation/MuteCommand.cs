@@ -1,8 +1,6 @@
-﻿using System.Globalization;
-
-namespace Flare.Commands.CommandLogic.Moderation;
+﻿namespace Flare.Commands.CommandLogic.Moderation;
 using Discord.Interactions;
-using Color = Discord.Color;
+using Color = Color;
 
 public class MuteCommand : InteractionModuleBase<SocketInteractionContext>
 {
@@ -35,12 +33,12 @@ public class MuteCommand : InteractionModuleBase<SocketInteractionContext>
             }
             
             //scuffed but works so wtvr
-            TimeSpan muteDuration = duration.Substring(duration.Length - 1) switch
+            var muteDuration = duration[^1..] switch
             {
-                "m" => TimeSpan.FromMinutes(Double.Parse(duration.Split('m')[0])),
-                "h" => TimeSpan.FromHours(Double.Parse(duration.Split('h')[0])),
-                "d" => TimeSpan.FromDays(Double.Parse(duration.Split('d')[0])),
-                "w" => TimeSpan.FromDays(Double.Parse(duration.Split('w')[0]) * 7),
+                "m" => TimeSpan.FromMinutes(double.Parse(duration.Split('m')[0])),
+                "h" => TimeSpan.FromHours(double.Parse(duration.Split('h')[0])),
+                "d" => TimeSpan.FromDays(double.Parse(duration.Split('d')[0])),
+                "w" => TimeSpan.FromDays(double.Parse(duration.Split('w')[0]) * 7),
                 _ => TimeSpan.FromMinutes(1)
             };
             await targetUserAsSocketGuildUser.SetTimeOutAsync(muteDuration);

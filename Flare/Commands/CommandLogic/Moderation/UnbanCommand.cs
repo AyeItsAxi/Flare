@@ -14,7 +14,7 @@ public class UnbanCommand : InteractionModuleBase<SocketInteractionContext>
         {
             var memberGuildUser = (SocketGuildUser)message.Author;
             var targetUser = DiscordClient.GetUserAsync(userId).Result;
-            var b = ((SocketGuildChannel)message.Channel).Guild.GetBansAsync(targetUser, Direction.Around, 1000);
+            var b = ((SocketGuildChannel)message.Channel).Guild.GetBansAsync(targetUser, Direction.Around);
             //this is so scuffed oh my god
             await foreach (var ban in b)
             {
