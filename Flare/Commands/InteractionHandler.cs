@@ -137,6 +137,25 @@ public static class InteractionHandler
 
                         await CommandLogic.Moderation.PurgeCommand.RunCommandLogic(message);
                         break;
+                    case "softban":
+                        if (message.MentionedUsers.Count == 0)
+                        {
+                            await message.Channel.SendMessageAsync("Please specify (@mention) a user to softban.");
+                            break;
+                        }
+
+                        var softbanReason = "Very responsible moderator, no reason provided.";
+                        if (!string.IsNullOrWhiteSpace(command.Split('>')[1]))
+                        {
+                            softbanReason = command.Split('>')[1];
+                        }
+
+                        await CommandLogic.Moderation.SoftbanCommand.RunCommandLogic(
+                            message,
+                            message.MentionedUsers.First(),
+                            softbanReason
+                        );
+                        break;
                 }
             }
             catch (Exception ex)
