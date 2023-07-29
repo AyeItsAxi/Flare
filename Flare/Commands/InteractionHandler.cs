@@ -116,6 +116,16 @@ public static class InteractionHandler
 
                         await message.Channel.SendMessageAsync("Please specify a Github username to get stats for.");
                         break;
+                    
+                    case "biden":
+                        if (message.Content.Length > 8 && !string.IsNullOrWhiteSpace(message.Content.Split(' ')[1]))
+                        {
+                            await CommandLogic.Main.BidenCommand.RunCommandLogic(message, message.Content[(message.Content.IndexOf(' ') + 1)..]);
+                            break;
+                        }
+
+                        await message.Channel.SendMessageAsync("Please attach text to process the image.");
+                        break;
 
                     case "kick":
                         if (message.MentionedUsers.Count == 0)
