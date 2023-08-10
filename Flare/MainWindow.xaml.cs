@@ -35,7 +35,7 @@
         private static Task ClearLog()
         {
             const string logPath = "App/DiscordLog.flare";
-            if (File.Exists(logPath)) { File.Delete(logPath); }
+            if (File.Exists(logPath)) { File.Delete(logPath); } 
             return Task.CompletedTask;
         }
 
@@ -91,9 +91,9 @@
 
         private static async Task MessageReceivedAsync(SocketMessage message)
         {
-            if (message.Author.Id == Variables.DiscordClient.CurrentUser.Id)
+            if (message.Author.Id == Variables.DiscordClient.CurrentUser.Id || message.Author.IsBot)
                 return;
-            await Commands.InteractionHandler.CommandHandler.HandleCommandReceive(message, message.Content[2..]);
+            if (message.Content.StartsWith(JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"))["BotPrefix"]?.ToString() ?? "f!")) { await Commands.InteractionHandler.CommandHandler.HandleCommandReceive(message, message.Content[2..]); }
         }
 
         // For better functionality & a more developer-friendly approach to handling any kind of interaction, refer to:

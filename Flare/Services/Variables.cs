@@ -6,5 +6,6 @@ namespace Flare.Services
     {
         public static DiscordSocketClient DiscordClient = null!;
         public static CommandService ClientCommandService = null!;
+        public static Models.ECommandEnum CommandContext = Models.ECommandEnum.Ping;
     }
 }
