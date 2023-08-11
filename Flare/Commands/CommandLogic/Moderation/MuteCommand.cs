@@ -1,4 +1,6 @@
-﻿namespace Flare.Commands.CommandLogic.Moderation;
+﻿using System.Linq;
+
+namespace Flare.Commands.CommandLogic.Moderation;
 using Discord.Interactions;
 using Color = Color;
 
@@ -8,8 +10,12 @@ public class MuteCommand : InteractionModuleBase<SocketInteractionContext>
     {
         try
         {
+            var tempMsg = await message.Channel.SendMessageAsync("Working on it...");
             var memberGuildUser = (SocketGuildUser)message.Author;
-            var targetUserAsSocketGuildUser = (SocketGuildUser)targetUser;
+            var guild = ((SocketGuildChannel)message.Channel).Guild;
+            var guildMemberList = await guild.GetUsersAsync().FlattenAsync();
+            var igu = guildMemberList.FirstOrDefault(user => user.Id == targetUser.Id);
+            
             if (!memberGuildUser.GuildPermissions.Has(GuildPermission.ManageMessages))
             {
                 var responseEmbed = new EmbedBuilder()
@@ -18,10 +24,11 @@ public class MuteCommand : InteractionModuleBase<SocketInteractionContext>
                     .WithColor(Color.Red)
                     .Build();
                 await message.Channel.SendMessageAsync("", false, responseEmbed);
+                await tempMsg.DeleteAsync();
                 return;
             }
 
-            if (targetUserAsSocketGuildUser.GuildPermissions.Has(GuildPermission.ManageMessages))
+            if (igu!.GuildPermissions.Has(GuildPermission.ManageMessages))
             {
                 var permissionsTooHighEmbed = new EmbedBuilder()
                     .WithTitle("You do not have permission to mute that member!")
@@ -29,6 +36,7 @@ public class MuteCommand : InteractionModuleBase<SocketInteractionContext>
                     .WithColor(Color.Red)
                     .Build();
                 await message.Channel.SendMessageAsync("", false, permissionsTooHighEmbed);
+                await tempMsg.DeleteAsync();
                 return;
             }
             
@@ -41,7 +49,7 @@ public class MuteCommand : InteractionModuleBase<SocketInteractionContext>
                 "w" => TimeSpan.FromDays(double.Parse(duration.Split('w')[0]) * 7),
                 _ => TimeSpan.FromMinutes(1)
             };
-            await targetUserAsSocketGuildUser.SetTimeOutAsync(muteDuration);
+            await igu.SetTimeOutAsync(muteDuration);
 
             var successEmbed = new EmbedBuilder()
                 .WithTitle($"Successfully muted {targetUser.Username}")
@@ -49,6 +57,7 @@ public class MuteCommand : InteractionModuleBase<SocketInteractionContext>
                 .WithColor(Color.Green)
                 .Build();
             await message.Channel.SendMessageAsync("", false, successEmbed);
+            await tempMsg.DeleteAsync();
         }
         catch (Exception ex)
         {

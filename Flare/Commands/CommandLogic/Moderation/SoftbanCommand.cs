@@ -1,4 +1,5 @@
-﻿using Discord.Interactions;
+﻿using System.Linq;
+using Discord.Interactions;
 
 namespace Flare.Commands.CommandLogic.Moderation;
 
@@ -8,8 +9,12 @@ public class SoftbanCommand : InteractionModuleBase<SocketInteractionContext>
     {
         try
         {
+            var tempMsg = await message.Channel.SendMessageAsync("Working on it...");
             var memberGuildUser = (SocketGuildUser)message.Author;
-            var targetUserAsSocketGuildUser = (SocketGuildUser)targetUser;
+            var guild = ((SocketGuildChannel)message.Channel).Guild;
+            var guildMemberList = await guild.GetUsersAsync().FlattenAsync();
+            var igu = guildMemberList.FirstOrDefault(user => user.Id == targetUser.Id);
+            
             if (!memberGuildUser.GuildPermissions.Has(GuildPermission.ManageMessages))
             {
                 var responseEmbed = new EmbedBuilder()
@@ -18,10 +23,11 @@ public class SoftbanCommand : InteractionModuleBase<SocketInteractionContext>
                     .WithColor(Color.Red)
                     .Build();
                 await message.Channel.SendMessageAsync("", false, responseEmbed);
+                await tempMsg.DeleteAsync();
                 return;
             }
 
-            if (targetUserAsSocketGuildUser.GuildPermissions.Has(GuildPermission.ManageMessages))
+            if (igu!.GuildPermissions.Has(GuildPermission.ManageMessages))
             {
                 var permissionsTooHighEmbed = new EmbedBuilder()
                     .WithTitle("You do not have permission to softban that member!")
@@ -29,21 +35,29 @@ public class SoftbanCommand : InteractionModuleBase<SocketInteractionContext>
                     .WithColor(Color.Red)
                     .Build();
                 await message.Channel.SendMessageAsync("", false, permissionsTooHighEmbed);
+                await tempMsg.DeleteAsync();
                 return;
             }
-            await targetUserAsSocketGuildUser.BanAsync(7, reason);
+            await igu.BanAsync(7, reason);
             await Task.Delay(300);
-            await ((SocketGuildUser)message.Author).Guild.RemoveBanAsync(targetUser);
+            await guild.RemoveBanAsync(targetUser);
             var successEmbed = new EmbedBuilder()
                 .WithTitle($"Successfully softbanned {targetUser.Username}")
                 .WithFooter($"Softbanned by {message.Author.Username}")
                 .WithColor(Color.Green)
                 .Build();
             await message.Channel.SendMessageAsync("", false, successEmbed);
+            await tempMsg.DeleteAsync();
         }
         catch (Exception ex)
         {
-            await message.Channel.SendMessageAsync("Please make sure to specify (@mention) a valid user. " + ex);
+            var failEmbed = new EmbedBuilder()
+                .WithTitle($"Failed to unmute {targetUser.Username}!")
+                .WithDescription($"Exception: {ex}")
+                .WithFooter($"Failed at {DateTime.Now}")
+                .WithColor(Color.Red)
+                .Build();
+            await message.Channel.SendMessageAsync("", false, failEmbed);
         }
     }
 }

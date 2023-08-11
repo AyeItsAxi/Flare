@@ -4,7 +4,6 @@ using Flare.Models;
 namespace Flare.Commands;
 
 // TODO: LockDown channel command
-// TODO: Help command
 
 public static class InteractionHandler
 {
@@ -117,6 +116,10 @@ public static class InteractionHandler
                     
                     case ECommandEnum.Heaven:
                         await CommandLogic.Main.HeavenCommand.RunCommandLogic(message, avatarUrl);
+                        break;
+                    
+                    case ECommandEnum.Help:
+                        await CommandLogic.Main.HelpCommand.RunCommandLogic(message);
                         break;
                     
                     case ECommandEnum.Kick:

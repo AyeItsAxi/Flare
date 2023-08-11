@@ -13,6 +13,7 @@ public enum ECommandEnum
     Github,
     Grave,
     Heaven,
+    Help,
     Kick,
     Lyrics,
     Mute,
