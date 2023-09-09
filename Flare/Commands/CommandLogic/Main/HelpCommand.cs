@@ -291,6 +291,19 @@ public class HelpCommand
                     .WithDescription($"Bans a user and then instantly unbans them to kick them from the server and delete their messages. {Environment.NewLine + Environment.NewLine}Aliases: {builder}")
                     .Build();
                 break;
+            
+            case ECommandEnum.Stats:
+                var statsArray = (JArray)obj["CommandAliases"]?["Stats"]!;
+                foreach (var item in statsArray)
+                {
+                    builder.AppendLine(item.ToString());
+                }
+                helpEmbed = new EmbedBuilder()
+                    .WithTitle("Stats Command")
+                    .WithColor(Color.LightOrange)
+                    .WithDescription($"Gets current stats about the server that Flare is running on and what version Flare is running. {Environment.NewLine + Environment.NewLine}Aliases: {builder}")
+                    .Build();
+                break;
                     
             case ECommandEnum.Unban:
                 var unbanArray = (JArray)obj["CommandAliases"]?["Unban"]!;

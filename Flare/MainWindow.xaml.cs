@@ -13,9 +13,20 @@
 
         private async void InitializeAsyncLoaders()
         {
+            await CheckIsNewInstance();
             await CheckIsNewCompile();
             await ClearLog();
             await InitiateDiscordAuthflow();
+        }
+
+        private static Task CheckIsNewInstance()
+        {
+            if (!Directory.Exists("App")) return Task.CompletedTask;
+            Directory.CreateDirectory("App");
+            Directory.CreateDirectory("App/Guilds");
+            Directory.CreateDirectory("App/Guilds/Channels");
+
+            return Task.CompletedTask;
         }
 
         private async Task CheckIsNewCompile()
@@ -29,6 +40,7 @@
             await File.WriteAllTextAsync(buildCfgPath, rss.ToString());
             //Redundant re-parse, improves code readability however
             rss = JObject.Parse(await File.ReadAllTextAsync(buildCfgPath));
+            Variables.FlareBuildVersion = $"Flare 0.1 - major={rss["FlareBuildName"].ToString().ToLower().Split(' ')[1]};build={rss["FlareBuildNumber"]};special=false;type=base";
             FlareBuildInformation.Content = $"{rss["FlareBuildName"]}, Version {rss["FlareBuildVersion"]}, Build {rss["FlareBuildNumber"]}.";
         }
 

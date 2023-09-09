@@ -9,7 +9,7 @@ public static class InteractionHandler
 {
     public static class CommandHandler
     {
-        private static ECommandEnum InterpretCommand(SocketMessage message)
+        private static ECommandEnum InterpretCommand(IMessage message)
         {
             var json = JObject.Parse(File.ReadAllText("App/BotConfiguration.flare"));
             var commandAliases = json["CommandAliases"];
@@ -142,6 +142,10 @@ public static class InteractionHandler
                         );
                         break;
                     
+                    case ECommandEnum.Lockdown:
+                        await CommandLogic.Moderation.LockdownCommand.RunCommandLogic(message);
+                        break;
+                    
                     case ECommandEnum.Lyrics:
                         if (message.Content.Length > 9 && !string.IsNullOrWhiteSpace(message.Content.Split(' ')[1]))
                         {
@@ -216,6 +220,10 @@ public static class InteractionHandler
                             message.MentionedUsers.First(),
                             softbanReason
                         );
+                        break;
+                    
+                    case ECommandEnum.Stats:
+                        CommandLogic.Main.StatsCommand.RunCommandLogic(message);
                         break;
                     
                     case ECommandEnum.Unban:
