@@ -4,9 +4,9 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-        xmlns:local="clr-namespace:Flare"
         mc:Ignorable="d" Background="#0c0d10"
         Title="Flare Control Panel" Height="450" Width="800"
+        ExtendsContentIntoTitleBar="True"
         ResizeMode="NoResize">
     <WindowChrome.WindowChrome>
         <WindowChrome GlassFrameThickness="1" CaptionHeight="0"/>
@@ -14,13 +14,13 @@
     <Window.Resources>
         <Style x:Key="TitlebarButton" BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
             <Style.Setters>
-                <Setter Property="Control.Background" Value="#0c0d10"/>
-                <Setter Property="Control.BorderThickness" Value="0"/>
-                <Setter Property="Control.Foreground" Value="#FAFAFA"/>
-                <Setter Property="FrameworkElement.Width" Value="46"/>
-                <Setter Property="FrameworkElement.Height" Value="29"/>
-                <Setter Property="FrameworkElement.VerticalAlignment" Value="Stretch"/>
-                <Setter Property="Control.Template">
+                <Setter Property="Background" Value="#0c0d10"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Foreground" Value="#FAFAFA"/>
+                <Setter Property="Width" Value="46"/>
+                <Setter Property="Height" Value="29"/>
+                <Setter Property="VerticalAlignment" Value="Stretch"/>
+                <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Background="{TemplateBinding Control.Background}">
@@ -46,13 +46,13 @@
         </Style>
         <Style x:Key="TitlebarButtonRed" BasedOn="{StaticResource {x:Type Button}}" TargetType="{x:Type Button}">
             <Style.Setters>
-                <Setter Property="Control.Background" Value="#0c0d10"/>
-                <Setter Property="Control.BorderThickness" Value="0"/>
-                <Setter Property="Control.Foreground" Value="#FAFAFA"/>
-                <Setter Property="FrameworkElement.Width" Value="46"/>
-                <Setter Property="FrameworkElement.Height" Value="29"/>
-                <Setter Property="FrameworkElement.VerticalAlignment" Value="Stretch"/>
-                <Setter Property="Control.Template">
+                <Setter Property="Background" Value="#0c0d10"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Foreground" Value="#FAFAFA"/>
+                <Setter Property="Width" Value="46"/>
+                <Setter Property="Height" Value="29"/>
+                <Setter Property="VerticalAlignment" Value="Stretch"/>
+                <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Border Background="{TemplateBinding Control.Background}">
@@ -94,36 +94,40 @@
                 </StackPanel>
             </Grid>
         </Grid>
-        <Label x:Name="FlareBuildInformation" Content="Flare" HorizontalAlignment="Left" Height="26" Margin="10,398,0,0" VerticalAlignment="Top" Width="790" Foreground="#FF969696"/>
+        <Label x:Name="FlareBuildInformation" Content="Flare" HorizontalAlignment="Left" Height="26" Margin="10,410,0,0" VerticalAlignment="Top" Width="390" Foreground="#FF969696"/>
         <Label x:Name="FlareOutput" Content="Flare will output debug information here." HorizontalAlignment="Center" Height="60" Margin="0,351,0,0" VerticalAlignment="Top" Width="738" Foreground="#FF969696" FontSize="34"/>
-        <ui:PasswordBox x:Name="tokenBox" HorizontalAlignment="Left" Height="34" Margin="80,224,0,0" TextWrapping="Wrap" Text="" PlaceholderText="Bot Token" MinWidth="500" VerticalAlignment="Top" Width="500"/>
-        <ui:Button x:Name="tokenSave" Content="Save" Height="34" Margin="600,224,0,0" VerticalAlignment="Top" Width="120"/>
-        <ComboBox x:Name="statusSelect" MinWidth="130" MinHeight="30" HorizontalAlignment="Left" Height="40" Margin="80,281,0,0" VerticalAlignment="Top" Width="130" SelectedIndex="0">
-            <ui:DropDownButton Name="PlayingStatus" Content="Playing"/>
-            <ui:DropDownButton Name="StreamingStatus" Content="Streaming"/>
-            <ui:DropDownButton Name="ListeningStatus" Content="Listening"/>
-            <ui:DropDownButton Name="WatchingStatus" Content="Watching"/>
-            <ui:DropDownButton Name="CompetingStatus" Content="Competing in"/>
-            <ui:DropDownButton/>
+        <ui:PasswordBox x:Name="TokenBox" Margin="80,223,0,176" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" PlaceholderText="Bot Token" VerticalAlignment="Top" Width="500" MinWidth="500" MinHeight="35"/>
+        <ui:Button x:Name="TokenSave" Content="Save" Height="34" Margin="600,224,0,0" VerticalAlignment="Top" Width="120" Click="OnTokenSave"/>
+        <ComboBox x:Name="StatusSelect" MinWidth="130" MinHeight="30" HorizontalAlignment="Left" Height="40" Margin="80,281,0,0" VerticalAlignment="Top" Width="130" SelectedIndex="0" SelectionChanged="StatusSelect_OnSelected">
+            <TextBlock Name="PlayingStatus" Text="Playing"/>
+            <TextBlock Name="StreamingStatus" Text="Streaming"/>
+            <TextBlock Name="ListeningStatus" Text="Listening"/>
+            <TextBlock Name="WatchingStatus" Text="Watching"/>
+            <TextBlock Name="CompetingStatus" Text="Competing in"/>
+            <TextBlock Name="CustomStatus" Text="(Custom)"/>
         </ComboBox>
-        <ui:TextBox x:Name="statusText" HorizontalAlignment="Left" Height="40" Margin="230,281,0,0" MinWidth="350" MinHeight="37" TextWrapping="Wrap" Text="" PlaceholderText="a really cool game" VerticalAlignment="Top" Width="350"/>
-        <ui:Button x:Name="statusSave" Content="Save" Height="37" Margin="600,281,0,0" VerticalAlignment="Top" Width="120"/>
+        <ui:TextBox x:Name="StatusText" HorizontalAlignment="Left" Height="40" Margin="230,281,0,0" MinWidth="350" MinHeight="37" TextWrapping="Wrap" Text="" PlaceholderText="a really cool game" VerticalAlignment="Top" Width="350" TextChanged="OnStatusTextKeyDown"/>
+        <ui:Button x:Name="StatusSave" Content="Save" Height="37" Margin="600,281,0,0" VerticalAlignment="Top" Width="120" Click="OnStatusSave"/>
         <Border BorderBrush="Black" BorderThickness="0" Background="#1a1b1e" CornerRadius="5" HorizontalAlignment="Center" Height="130" Margin="0,61,0,0" VerticalAlignment="Top" Width="640">
-            <Grid Name="ProfilePreviewHost">
+            <Grid>
                 <Border Background="#403582" HorizontalAlignment="Center" Height="52" VerticalAlignment="Top" Width="640" CornerRadius="5"/>
                 <Border Background="#403582" HorizontalAlignment="Left" Height="34" VerticalAlignment="Top" Width="28" Margin="0,28,0,0"/>
                 <Border Background="#403582" CornerRadius="0, 0, 0, 5" HorizontalAlignment="Left" Height="34" VerticalAlignment="Top" Width="30" Margin="610,28,0,0"/>
                 <Border Background="#1a1b1e" CornerRadius="10" HorizontalAlignment="Left" Height="73" VerticalAlignment="Top" Width="515" Margin="95,38,0,0"/>
                 <Border Background="#403582" HorizontalAlignment="Left" Height="34" CornerRadius="0, 0, 5, 0" VerticalAlignment="Top" Width="28" Margin="67,28,0,0"/>
-                <Ellipse Name="AvatarRingEllipse" HorizontalAlignment="Left" Height="78" Margin="7,23,0,0" Stroke="#1a1b1e" Fill="#1a1b1e" VerticalAlignment="Top" Width="78"/>
-                <Ellipse x:Name="AvatarImage" HorizontalAlignment="Left" Height="68" Margin="12,28,0,0" Fill="#424242" VerticalAlignment="Top" Width="68" Opacity="1"/>
-                <ui:SymbolIcon Name="DefaultAvatarIcon" HorizontalAlignment="Left" Height="48" Margin="22,38,0,0" VerticalAlignment="Top" Width="48" Symbol="Person48" FontSize="48"/>
-                <TextBlock x:Name="botUserName" HorizontalAlignment="Left" Height="53" Margin="105,45,0,0" TextWrapping="Wrap" Text="Not logged in yet..." VerticalAlignment="Top" Width="469" FontSize="48" Foreground="#FFEAEAEA" FontFamily="/Lib/Fonts/#Rotunda" Opacity="0.8"/>
-                <TextBlock x:Name="botStatus" HorizontalAlignment="Left" Height="22" Margin="16,105,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="611" FontFamily="/Lib/Fonts/#Rotunda" FontSize="16"><Run Name="StatusTypePreview" Text="Playing" Foreground="#FF848A92"/> <Run Name="StatusPreview" Text="a really cool game" Foreground="#949ba4"/></TextBlock>
-                <Ellipse x:Name="StatusIndicatorCutout" HorizontalAlignment="Left" Height="28" Margin="57,68,0,0" Fill="#1a1b1e" VerticalAlignment="Top" Width="28" Opacity="1"/>
-                <Ellipse x:Name="StatusIndicator" HorizontalAlignment="Left" Height="18" Margin="62,73,0,0" Fill="#80848e" VerticalAlignment="Top" Width="18" Opacity="1"/>
+                <Ellipse HorizontalAlignment="Left" Height="78" Margin="7,23,0,0" Stroke="#1a1b1e" Fill="#1a1b1e" VerticalAlignment="Top" Width="78"/>
+                <Ellipse HorizontalAlignment="Left" Height="68" Margin="12,28,0,0" Fill="#424242" VerticalAlignment="Top" Width="68" Opacity="1"/>
+                <ui:SymbolIcon HorizontalAlignment="Left" Height="48" Margin="22,38,0,0" VerticalAlignment="Top" Width="48" Symbol="Person48" FontSize="48"/>
+                <Border HorizontalAlignment="Left" Height="68" Margin="12,28,0,0" VerticalAlignment="Top" Width="68" Opacity="1" CornerRadius="100">
+                    <Border.Background>
+                        <ImageBrush x:Name="AvatarImageBrush" Stretch="UniformToFill"/>
+                    </Border.Background>
+                </Border>
+                <TextBlock x:Name="BotUserName" HorizontalAlignment="Left" Height="53" Margin="105,45,0,0" TextWrapping="Wrap" Text="Not logged in yet..." VerticalAlignment="Top" Width="469" FontSize="48" Foreground="#FFEAEAEA" FontFamily="/Lib/Fonts/#Rotunda" Opacity="0.8"/>
+                <TextBlock HorizontalAlignment="Left" Height="22" Margin="16,105,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="611" FontFamily="/Lib/Fonts/#Rotunda" FontSize="16"><Run Name="StatusTypePreview" Text="Playing " Foreground="#FF848A92"/><Run Name="StatusPreview" Text="a really cool game" Foreground="#949ba4"/></TextBlock>
+                <Ellipse HorizontalAlignment="Left" Height="28" Margin="57,68,0,0" Fill="#1a1b1e" VerticalAlignment="Top" Width="28" Opacity="1"/>
+                <Ellipse x:Name="BotStatusEllipse" HorizontalAlignment="Left" Height="18" Margin="62,73,0,0" Fill="#80848e" VerticalAlignment="Top" Width="18" Opacity="1"/>
             </Grid>
         </Border>
-
     </Grid>
 </ui:UiWindow>
