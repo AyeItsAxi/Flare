@@ -1,6 +1,6 @@
 ﻿namespace Flare.Commands.CommandLogic.Main;
 
-public class WideCommand
+public static class WideCommand
 {
     public static async Task RunCommandLogic(SocketMessage message, string imageUrl)
     {

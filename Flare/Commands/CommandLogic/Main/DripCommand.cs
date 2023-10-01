@@ -1,6 +1,6 @@
 ﻿namespace Flare.Commands.CommandLogic.Main;
 
-public class DripCommand
+public static class DripCommand
 {
     public static async Task RunCommandLogic(SocketMessage message, string avatarUrl)
     {

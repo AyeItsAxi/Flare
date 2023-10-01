@@ -1,6 +1,6 @@
 ﻿namespace Flare.Commands.CommandLogic.Main;
 
-public class WaterCommand
+public static class WaterCommand
 {
     public static async Task RunCommandLogic(SocketMessage message, string text)
     {

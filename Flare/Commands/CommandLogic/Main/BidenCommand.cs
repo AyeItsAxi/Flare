@@ -1,6 +1,6 @@
 ﻿namespace Flare.Commands.CommandLogic.Main;
 
-public class BidenCommand
+public static class BidenCommand
 {
     public static async Task RunCommandLogic(SocketMessage message, string text)
     {

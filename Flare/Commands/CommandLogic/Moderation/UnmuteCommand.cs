@@ -1,7 +1,6 @@
 ﻿namespace Flare.Commands.CommandLogic.Moderation;
-using Discord.Interactions;
 
-public class UnmuteCommand : InteractionModuleBase<SocketInteractionContext>
+public abstract class UnmuteCommand : InteractionModuleBase<SocketInteractionContext>
 {
     public static async Task RunCommandLogic(SocketMessage message, SocketUser targetUser)
     {

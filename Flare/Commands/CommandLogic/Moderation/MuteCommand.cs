@@ -1,10 +1,6 @@
-﻿using System.Linq;
+﻿namespace Flare.Commands.CommandLogic.Moderation;
 
-namespace Flare.Commands.CommandLogic.Moderation;
-using Discord.Interactions;
-using Color = Color;
-
-public class MuteCommand : InteractionModuleBase<SocketInteractionContext>
+public abstract class MuteCommand : InteractionModuleBase<SocketInteractionContext>
 {
     public static async Task RunCommandLogic(SocketMessage message, SocketUser targetUser, string duration)
     {

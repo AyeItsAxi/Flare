@@ -1,7 +1,8 @@
 ﻿namespace Flare.Commands.CommandLogic.Main;
 
-public class LyricsCommand
+public static class LyricsCommand
 {
+    #pragma warning disable SYSLIB0014
     //this works 1/20th of the time but its free so im not complaining
     public static async Task RunCommandLogic(SocketMessage message, string songName)
     {
@@ -30,4 +31,5 @@ public class LyricsCommand
         await message.Channel.SendMessageAsync(null, false, imageEmbed);
         await loadingMsg.DeleteAsync();
     }
+    #pragma warning restore SYSLIB0014
 }

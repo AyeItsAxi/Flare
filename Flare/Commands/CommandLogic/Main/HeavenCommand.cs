@@ -1,6 +1,6 @@
 ﻿namespace Flare.Commands.CommandLogic.Main;
 
-public class HeavenCommand
+public static class HeavenCommand
 {
     public static async Task RunCommandLogic(SocketMessage message, string avatarUrl)
     {

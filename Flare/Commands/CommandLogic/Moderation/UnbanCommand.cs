@@ -1,11 +1,6 @@
-﻿using System.Linq;
-using static Flare.Services.Variables;
+﻿namespace Flare.Commands.CommandLogic.Moderation;
 
-namespace Flare.Commands.CommandLogic.Moderation;
-using Discord.Interactions;
-using Color = Color;
-
-public class UnbanCommand : InteractionModuleBase<SocketInteractionContext>
+public abstract class UnbanCommand : InteractionModuleBase<SocketInteractionContext>
 {
     public static async Task RunCommandLogic(SocketMessage message, ulong userId)
     {

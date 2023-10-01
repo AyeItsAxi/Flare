@@ -1,7 +1,8 @@
 ﻿namespace Flare.Commands.CommandLogic.Main;
 
-public class DogCommand
+public static class DogCommand
 {
+    #pragma warning disable SYSLIB0014
     public static async Task RunCommandLogic(SocketMessage message)
     {
         var dogCommandMsg = await message.Channel.SendMessageAsync("Getting a random dog image for you...");
@@ -15,4 +16,5 @@ public class DogCommand
         await message.Channel.DeleteMessageAsync(message);
         await message.Channel.DeleteMessageAsync(dogCommandMsg);
     }
+    #pragma warning restore SYSLIB0014
 }

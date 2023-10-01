@@ -1,7 +1,3 @@
-using System.Diagnostics;
-using System.Management;
-using Flare.Models;
-
 namespace Flare.Commands.CommandLogic.Main;
 
 public static class StatsCommand
@@ -12,8 +8,9 @@ public static class StatsCommand
         
         //Gets total memory size
         long memSize = 0;
-        foreach (ManagementObject obj in new ManagementObjectSearcher(new ManagementScope(), new ObjectQuery("SELECT Capacity FROM Win32_PhysicalMemory")).Get())
+        foreach (var o in new ManagementObjectSearcher(new ManagementScope(), new ObjectQuery("SELECT Capacity FROM Win32_PhysicalMemory")).Get())
         {
+            var obj = (ManagementObject)o;
             var mCap = Convert.ToInt64(obj["Capacity"]);
             memSize += mCap;
         }
@@ -22,12 +19,13 @@ public static class StatsCommand
         //Gets current used memory
         var gcMemoryInfo = GC.GetGCMemoryInfo();
         var installedMemory = gcMemoryInfo.MemoryLoadBytes;
-        var physicalMemory = (double)installedMemory / 1048576.0;
+        var physicalMemory = installedMemory / 1048576.0;
         
         //Gets CPU information (Model, Clock speed)
         var cpuInfo = string.Empty;
-        foreach (ManagementObject mo in new ManagementClass("win32_processor").GetInstances())
+        foreach (var o in new ManagementClass("win32_processor").GetInstances())
         {
+            var mo = (ManagementObject)o;
             var name = (string)mo["Name"];
             name = name.Replace("(TM)", "").Replace("(tm)", "").Replace("(R)", "").Replace("(r)", "").Replace("(C)", "").Replace("(c)", "").Replace("    ", " ").Replace("  ", " ");
 
@@ -54,6 +52,6 @@ public static class StatsCommand
             .WithColor(Color.Red)
             .Build();
         await message.Channel.SendMessageAsync(null, false, statsEmbed);
-        tempMessage.DeleteAsync();
+        await tempMessage.DeleteAsync();
     }
 }

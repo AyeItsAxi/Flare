@@ -1,9 +1,4 @@
-﻿using System.Linq;
-using Flare.Models;
-
-namespace Flare.Commands;
-
-// TODO: LockDown channel command
+﻿namespace Flare.Commands;
 
 public static class InteractionHandler
 {
@@ -223,7 +218,7 @@ public static class InteractionHandler
                         break;
                     
                     case ECommandEnum.Stats:
-                        CommandLogic.Main.StatsCommand.RunCommandLogic(message);
+                        await CommandLogic.Main.StatsCommand.RunCommandLogic(message);
                         break;
                     
                     case ECommandEnum.Unban:

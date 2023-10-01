@@ -1,6 +1,6 @@
 ﻿namespace Flare.Commands.CommandLogic.Main;
 
-public class WolverineCommand
+public static class WolverineCommand
 {
     public static async Task RunCommandLogic(SocketMessage message, string avatarUrl)
     {

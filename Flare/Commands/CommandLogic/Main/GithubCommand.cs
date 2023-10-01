@@ -1,7 +1,8 @@
 ﻿namespace Flare.Commands.CommandLogic.Main;
 
-public class GithubCommand
+public static class GithubCommand
 {
+    #pragma warning disable SYSLIB0014
     public static async Task RunCommandLogic(SocketMessage message, string text)
     {
         var jsonResponse = JObject.Parse(new WebClient().DownloadString($"https://api.popcat.xyz/github/{text.Replace(" ", "%20")}"));
@@ -25,4 +26,5 @@ public class GithubCommand
             .Build();
         await message.Channel.SendMessageAsync(null, false, imageEmbed);
     }
+    #pragma warning restore SYSLIB0014
 }

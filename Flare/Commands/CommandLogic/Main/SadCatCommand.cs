@@ -1,6 +1,6 @@
 ﻿namespace Flare.Commands.CommandLogic.Main;
 
-public class SadCatCommand
+public static class SadCatCommand
 {
     public static async Task RunCommandLogic(SocketMessage message, string text)
     {

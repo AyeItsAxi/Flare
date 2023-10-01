@@ -1,17 +1,13 @@
-﻿using System.Linq;
-using System.Text;
-using Flare.Models;
+﻿namespace Flare.Commands.CommandLogic.Main;
 
-namespace Flare.Commands.CommandLogic.Main;
-
-public class HelpCommand
+public static class HelpCommand
 {
     public static async Task RunCommandLogic(SocketMessage message)
     {
         ECommandEnum? requestedCommand = null;
         if (message.Content.Length > 7)
         {
-            var json = JObject.Parse(File.ReadAllText("App/BotConfiguration.flare"));
+            var json = JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"));
             var commandAliases = json["CommandAliases"];
 
             foreach (var jToken in commandAliases!)
@@ -28,12 +24,7 @@ public class HelpCommand
             }
         }
         
-        Embed helpEmbed = new EmbedBuilder()
-            .WithTitle("Flare Help Embed Title")
-            .WithColor(Color.LightOrange)
-            .WithDescription("You shouldn't be seeing this")
-            .WithFooter("Flare Help Embed Footer")
-            .Build();
+        Embed helpEmbed;
         var obj = JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"));
         var builder = new StringBuilder();
         switch (requestedCommand)
@@ -210,7 +201,7 @@ public class HelpCommand
                     .WithTitle("Kick Command")
                     .WithColor(Color.LightOrange)
                     .WithDescription($"Kicks a user from the server. {Environment.NewLine + Environment.NewLine}Aliases: {builder}")
-                    .Build();;
+                    .Build();
                 break;
                     
             case ECommandEnum.Lyrics:

@@ -1,6 +1,6 @@
 ﻿namespace Flare.Commands.CommandLogic.Main;
 
-public class AdiosCommand
+public static class AdiosCommand
 {
     public static async Task RunCommandLogic(SocketMessage message, string avatarUrl)
     {

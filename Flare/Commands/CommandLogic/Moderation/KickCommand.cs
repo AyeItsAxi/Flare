@@ -1,10 +1,6 @@
-﻿using System.Linq;
-using Discord.Interactions;
-using Color = Discord.Color;
+﻿namespace Flare.Commands.CommandLogic.Moderation;
 
-namespace Flare.Commands.CommandLogic.Moderation;
-
-public class KickCommand : InteractionModuleBase<SocketInteractionContext>
+public abstract class KickCommand : InteractionModuleBase<SocketInteractionContext>
 {
     public static async Task RunCommandLogic(SocketMessage message, SocketUser targetUser, string reason)
     {

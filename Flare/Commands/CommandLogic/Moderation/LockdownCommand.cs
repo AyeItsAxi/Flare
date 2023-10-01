@@ -1,8 +1,6 @@
-﻿using System.Threading.Channels;
+﻿namespace Flare.Commands.CommandLogic.Moderation;
 
-namespace Flare.Commands.CommandLogic.Moderation;
-
-public class LockdownCommand
+public static class LockdownCommand
 {
     public static async Task RunCommandLogic(SocketMessage message)
     {

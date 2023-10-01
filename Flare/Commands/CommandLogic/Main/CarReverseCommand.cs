@@ -1,6 +1,6 @@
 ﻿namespace Flare.Commands.CommandLogic.Main;
 
-public class CarReverseCommand
+public static class CarReverseCommand
 {
     public static async Task RunCommandLogic(SocketMessage message, string text)
     {

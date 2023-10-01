@@ -6,7 +6,7 @@ public static class AvatarCommand
     {
         try
         {
-            Embed avatarEmbed = new EmbedBuilder()
+            var avatarEmbed = new EmbedBuilder()
                 .WithTitle($"{targetUser.Username}'s avatar")
                 .WithImageUrl(targetUser.GetAvatarUrl(ImageFormat.WebP, 4096))
                 .WithColor(Color.LightOrange)

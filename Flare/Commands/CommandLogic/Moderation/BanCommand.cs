@@ -1,9 +1,6 @@
-﻿using System.Linq;
-using Discord.Interactions;
+﻿namespace Flare.Commands.CommandLogic.Moderation;
 
-namespace Flare.Commands.CommandLogic.Moderation;
-
-public class BanCommand : InteractionModuleBase<SocketInteractionContext>
+public abstract class BanCommand : InteractionModuleBase<SocketInteractionContext>
 {
     public static async Task RunCommandLogic(SocketMessage message, SocketUser targetUser, string reason)
     {

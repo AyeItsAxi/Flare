@@ -1,8 +1,6 @@
-﻿using Discord.Interactions;
+﻿namespace Flare.Commands.CommandLogic.Moderation;
 
-namespace Flare.Commands.CommandLogic.Moderation;
-
-public class PurgeCommand : InteractionModuleBase<SocketInteractionContext>
+public abstract class PurgeCommand : InteractionModuleBase<SocketInteractionContext>
 {
     public static async Task RunCommandLogic(SocketMessage message, int limit = 10)
     {

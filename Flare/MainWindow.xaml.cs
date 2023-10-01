@@ -1,7 +1,7 @@
-﻿using System.Drawing;
+﻿//not declared in globals.cs cause ambiguous reference color between discord.color and whatever of these 3 libraries
+using System.Drawing;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Flare.Models;
 
 namespace Flare
 {
@@ -45,7 +45,7 @@ namespace Flare
             await File.WriteAllTextAsync(buildCfgPath, rss.ToString());
             //Redundant re-parse, improves code readability however
             rss = JObject.Parse(await File.ReadAllTextAsync(buildCfgPath));
-            Variables.FlareBuildVersion = $"Flare 0.1 - major={rss["FlareBuildName"]!.ToString().ToLower().Split(' ')[1]};build={rss["FlareBuildNumber"]};special=false;type=base";
+            FlareBuildVersion = $"Flare 0.1 - major={rss["FlareBuildName"]!.ToString().ToLower().Split(' ')[1]};build={rss["FlareBuildNumber"]};special=false;type=base";
             FlareBuildInformation.Content = $"{rss["FlareBuildName"]}, Version {rss["FlareBuildVersion"]}, Build {rss["FlareBuildNumber"]}.";
         }
 
@@ -60,20 +60,19 @@ namespace Flare
         /* DISCORD: Authflow */
         private async Task InitiateDiscordAuthflow()
         {
-            Variables.DiscordClient = new DiscordSocketClient(new DiscordSocketConfig
+            DiscordClient = new DiscordSocketClient(new DiscordSocketConfig
             {
                 GatewayIntents = GatewayIntents.All | GatewayIntents.MessageContent
             });
-            Variables.ClientCommandService = new CommandService(new CommandServiceConfig
+            ClientCommandService = new CommandService(new CommandServiceConfig
             {
                 LogLevel = LogSeverity.Debug,
                 CaseSensitiveCommands = false,
             });
-            Variables.DiscordClient.Log += Log;
-            Variables.ClientCommandService.Log += Log;
-            Variables.DiscordClient.MessageReceived += MessageReceivedAsync;
-            Variables.DiscordClient.InteractionCreated += InteractionCreatedAsync;
-            Variables.DiscordClient.Ready += async () => await Application.Current.Dispatcher.InvokeAsync(UpdateUiComponents);
+            DiscordClient.Log += Log;
+            ClientCommandService.Log += Log;
+            DiscordClient.MessageReceived += MessageReceivedAsync;
+            DiscordClient.Ready += async () => await Application.Current.Dispatcher.InvokeAsync(UpdateUiComponents);
             await LoginDiscord();
         }
 
@@ -81,8 +80,8 @@ namespace Flare
         {
             _bIsPendingRestart = false;
             var rss = JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"));
-            await Variables.DiscordClient.LoginAsync(TokenType.Bot, rss["BotToken"]!.ToString());
-            await Variables.DiscordClient.StartAsync();
+            await DiscordClient.LoginAsync(TokenType.Bot, rss["BotToken"]!.ToString());
+            await DiscordClient.StartAsync();
             while (!_bIsPendingRestart)
             {
                 await Task.Delay(-1);
@@ -113,28 +112,9 @@ namespace Flare
 
         private static async Task MessageReceivedAsync(SocketMessage message)
         {
-            if (message.Author.Id == Variables.DiscordClient.CurrentUser.Id || message.Author.IsBot)
+            if (message.Author.Id == DiscordClient.CurrentUser.Id || message.Author.IsBot)
                 return;
             if (message.Content.StartsWith(JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"))["BotPrefix"]?.ToString() ?? "f!")) { await Commands.InteractionHandler.CommandHandler.HandleCommandReceive(message, message.Content[2..]); }
-        }
-
-        // For better functionality & a more developer-friendly approach to handling any kind of interaction, refer to:
-        // https://discordnet.dev/guides/int_framework/intro.html
-        private static async Task InteractionCreatedAsync(SocketInteraction interaction)
-        {
-            // safety-casting is the best way to prevent something being cast from being null.
-            // If this check does not pass, it could not be cast to said type.
-            if (interaction is SocketMessageComponent component)
-            {
-                // Check for the ID created in the button mentioned above.
-                if (component.Data.CustomId == "pingmessage-option1")
-                    await interaction.RespondAsync("Thank you for clicking my button!");
-                if (component.Data.CustomId == "pingmessage-option2")
-                    await interaction.RespondAsync($"Consider suicide, <@!{interaction.User.Id}>.");
-
-                else
-                    Console.WriteLine("An ID has been received that has no handler!");
-            }
         }
         
         private static EStatusType GetStatusType()
@@ -165,7 +145,7 @@ namespace Flare
         private async Task UpdateUiComponents()
         {
             Bitmap bitmap;
-            using (var ms = new MemoryStream(await new WebClient().DownloadDataTaskAsync(Variables.DiscordClient.CurrentUser.GetAvatarUrl())))
+            using (var ms = new MemoryStream(await new WebClient().DownloadDataTaskAsync(DiscordClient.CurrentUser.GetAvatarUrl())))
             {
                 var image = System.Drawing.Image.FromStream(ms);
                 bitmap = new Bitmap(image);
@@ -193,7 +173,7 @@ namespace Flare
                 _ => ""
             };
             StatusSelect.SelectedItem = selectedDdb;
-            BotUserName.Text = Variables.DiscordClient.CurrentUser.Username;
+            BotUserName.Text = DiscordClient.CurrentUser.Username;
             var statusStr = JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"))["StatusContent"]!.ToString();
             StatusTypePreview.Text = statusTypeFromJson;
             StatusPreview.Text = statusStr;
@@ -259,7 +239,7 @@ namespace Flare
             var json = JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"));
             json["BotToken"] = TokenBox.Password;
             await File.WriteAllTextAsync("App/BotConfiguration.flare", json.ToString());
-            await Variables.DiscordClient.LogoutAsync();
+            await DiscordClient.LogoutAsync();
             _bIsPendingRestart = true;
             await Task.Delay(500);
             await LoginDiscord();
@@ -286,7 +266,7 @@ namespace Flare
 
         private static async Task UpdateBotStatus(string content, ActivityType activityType)
         {
-            await Variables.DiscordClient.SetActivityAsync(new Game(content, activityType));
+            await DiscordClient.SetActivityAsync(new Game(content, activityType));
         }
 
         private void OnStatusTextKeyDown(object sender, RoutedEventArgs e)
