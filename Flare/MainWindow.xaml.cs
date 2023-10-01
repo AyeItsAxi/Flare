@@ -1,7 +1,10 @@
 ﻿//not declared in globals.cs cause ambiguous reference color between discord.color and whatever of these 3 libraries
+
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Newtonsoft.Json;
 
 namespace Flare
 {
@@ -72,7 +75,7 @@ namespace Flare
             DiscordClient.Log += Log;
             ClientCommandService.Log += Log;
             DiscordClient.MessageReceived += MessageReceivedAsync;
-            DiscordClient.Ready += async () => await Application.Current.Dispatcher.InvokeAsync(UpdateUiComponents);
+            DiscordClient.Ready += async () => await Application.Current.Dispatcher.InvokeAsync(OnClientReady);
             await LoginDiscord();
         }
 
@@ -114,7 +117,7 @@ namespace Flare
         {
             if (message.Author.Id == DiscordClient.CurrentUser.Id || message.Author.IsBot)
                 return;
-            if (message.Content.StartsWith(JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"))["BotPrefix"]?.ToString() ?? "f!")) { await Commands.InteractionHandler.CommandHandler.HandleCommandReceive(message, message.Content[2..]); }
+            await Commands.InteractionHandler.CommandHandler.MessagePrefilter(message);
         }
         
         private static EStatusType GetStatusType()
@@ -141,6 +144,20 @@ namespace Flare
 
         
         #pragma warning disable SYSLIB0014
+
+        private async Task OnClientReady()
+        {
+            foreach (var guild in DiscordClient.Guilds)
+            {
+                if (!File.Exists($"App/Guilds/{guild.Id.ToString()}")) continue;
+                Directory.CreateDirectory($"App/Guilds/{guild.Id.ToString()}");
+                await File.WriteAllTextAsync($"App/Guilds/{guild.Id.ToString()}/GuildConfiguration.flare", JsonConvert.SerializeObject(new GuildConfiguration
+                {
+                    AutoModLinkFilter = false
+                }));
+            }
+            await UpdateUiComponents();
+        }
         
         private async Task UpdateUiComponents()
         {

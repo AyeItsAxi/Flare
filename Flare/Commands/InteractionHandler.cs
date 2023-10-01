@@ -1,4 +1,6 @@
-﻿namespace Flare.Commands;
+﻿using Newtonsoft.Json;
+
+namespace Flare.Commands;
 
 public static class InteractionHandler
 {
@@ -18,6 +20,9 @@ public static class InteractionHandler
                     return (ECommandEnum)Enum.Parse(typeof(ECommandEnum), command.Name);
                 }
             }
+            
+            
+            MessageBox.Show(message.Content.ToLower().Split('!')[1].Split(' ')[0].Replace('.', '_'));
 
             return ECommandEnum.None;
         }
@@ -197,6 +202,10 @@ public static class InteractionHandler
                         await message.Channel.SendMessageAsync("Please attach text to process the image.");
                         break;
                     
+                    case ECommandEnum.ServerConfiguration_SetAutoModLinkFilter:
+                        await CommandLogic.Moderation.Guild.AutoModLinkFilter.SetValue(message);
+                        break;
+                    
                     case ECommandEnum.Softban:
                         if (message.MentionedUsers.Count == 0)
                         {
@@ -293,13 +302,23 @@ public static class InteractionHandler
             catch (Exception ex)
             {
                 var failEmbed = new EmbedBuilder()
-                    .WithTitle($"Failed to execute command!")
+                    .WithTitle("Failed to execute command!")
                     .WithDescription($"Exception: {ex}")
                     .WithFooter($"Failed at {DateTime.Now}")
                     .WithColor(Color.Red)
                     .Build();
                 await message.Channel.SendMessageAsync("", false, failEmbed);
             }
+        }
+
+        public static async Task MessagePrefilter(SocketMessage message)
+        {
+            var passesLinkPrefilter = true;
+            var serverConfiguration = JsonConvert.DeserializeObject<GuildConfiguration>(await File.ReadAllTextAsync($"App/Guilds/{((SocketGuildChannel)message.Channel).Guild.Id.ToString()}/GuildConfiguration.flare"))!;
+            // literally only runs if i add this stupid console.writeline
+            if (serverConfiguration.AutoModLinkFilter == true) Console.WriteLine("Link prefilter patch"); passesLinkPrefilter = !await CommandLogic.Moderation.Guild.AutoModLinkFilter.RunModLogic(message);
+            if (passesLinkPrefilter && message.Content.StartsWith(JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"))["BotPrefix"]?.ToString() ?? "f!")) await HandleCommandReceive(message, message.Content[2..]);
+            //scuffed but works so yeah
         }
     }
 

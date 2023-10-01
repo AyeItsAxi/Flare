@@ -21,6 +21,7 @@ public enum ECommandEnum
     Ping,
     Purge,
     SadCat,
+    ServerConfiguration_SetAutoModLinkFilter,
     Softban,
     Stats,
     Unban,
