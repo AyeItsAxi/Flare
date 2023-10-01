@@ -269,9 +269,6 @@ namespace Flare
             await DiscordClient.SetActivityAsync(new Game(content, activityType));
         }
 
-        private void OnStatusTextKeyDown(object sender, RoutedEventArgs e)
-        {
-            StatusPreview.Text = StatusText.Text;
-        }
+        private void OnStatusTextKeyDown(object sender, RoutedEventArgs e) => StatusPreview.Text = StatusText.Text;
     }
 }
