@@ -17,4 +17,7 @@ global using Newtonsoft.Json.Linq;
 global using Discord.Interactions;
 global using Discord.Interactions;
 global using System.Threading.Tasks;
+global using System.Collections.Generic;
+global using System.Windows.Media.Animation;
 global using static Flare.Services.Variables;
+global using Microsoft.Toolkit.Uwp.Notifications;

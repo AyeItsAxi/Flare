@@ -12,6 +12,7 @@
         ResizeMode="NoResize"
         Title="FTSWindow" Height="450" Width="800">
     <Grid Background="#0c0d10">
+        <!-- ReSharper disable InconsistentNaming -->
         <Label x:Name="flareWelcomeLabel" Content="Welcome to Flare!" HorizontalAlignment="Left" Height="64" Margin="25,25,0,0" VerticalAlignment="Top" Width="419" FontSize="48" Foreground="#FFDBDEE1" FontFamily="Segoe UI Light"/>
         <Label x:Name="label" Content="Just a few things and we'll get you on your way." HorizontalContentAlignment="Center" HorizontalAlignment="Center" Height="63" Margin="0,92,0,0" VerticalAlignment="Top" Width="734" FontSize="20" Foreground="#FFDBDEE1"/>
         <Label x:Name="flareBuildInfo" Content="Version:&#x0d;&#x0a;Started at:" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="64" Margin="400,32,0,0" VerticalAlignment="Top" Width="367" Foreground="#87BDBDBD"/>

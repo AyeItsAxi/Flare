@@ -21,6 +21,16 @@ public static class StatsCommand
         var installedMemory = gcMemoryInfo.MemoryLoadBytes;
         var physicalMemory = installedMemory / 1048576.0;
         
+        //Gets renderer
+        var gpuInfo = string.Empty;
+        using (var searcher = new ManagementObjectSearcher("select * from Win32_VideoController"))
+        {
+            foreach (var obj in searcher.Get())
+            {
+                gpuInfo = obj["Name"].ToString();
+            }
+        }
+        
         //Gets CPU information (Model, Clock speed)
         var cpuInfo = string.Empty;
         foreach (var o in new ManagementClass("win32_processor").GetInstances())
@@ -48,7 +58,7 @@ public static class StatsCommand
         
         var statsEmbed = new EmbedBuilder()
             .WithTitle("Flare Information")
-            .WithDescription($"**Flare Info**\r\n{Variables.FlareBuildVersion}\r\nCommand Amount: {Enum.GetNames(typeof(ECommandEnum)).Length - 1}\r\n\r\n**Server Info**\r\nFlare running on {Environment.MachineName} ({Environment.OSVersion})\r\nServer Uptime: {formattedTimeSpan}\r\nCPU Usage: {Math.Round(cpuCounter.NextValue())}% ({cpuInfo.Split(',')[0]})\r\nRAM Usage: {Math.Round(physicalMemory):00,000}MB / {memSize:00,000}MB\r\n*(Flare is using {Math.Round((double)Process.GetCurrentProcess().PrivateMemorySize64 / 1024 / 1024 )}MB)*")
+            .WithDescription($"**Flare Info**\r\n{Variables.FlareBuildVersion}\r\nCommand Amount: {Enum.GetNames(typeof(ECommandEnum)).Length - 1}\r\n\r\n**Server Info**\r\nFlare running on {Environment.MachineName} ({Environment.OSVersion})\r\nServer Uptime: {formattedTimeSpan}\r\nCPU Usage: {Math.Round(cpuCounter.NextValue())}% ({cpuInfo.Split(',')[0]})\r\nRAM Usage: {Math.Round(physicalMemory):00,000}MB / {memSize:00,000}MB\r\nRenderer: {gpuInfo}\r\n*(Flare is using {Math.Round((double)Process.GetCurrentProcess().PrivateMemorySize64 / 1024 / 1024 )}MB)*")
             .WithColor(Color.Red)
             .Build();
         await message.Channel.SendMessageAsync(null, false, statsEmbed);

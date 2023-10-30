@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-
-namespace Flare.Commands;
+﻿namespace Flare.Commands;
 
 public static class InteractionHandler
 {
@@ -12,16 +9,6 @@ public static class InteractionHandler
             try
             {
                 var commandAliases = json.CommandAliases;
-
-                /*foreach (var jToken in commandAliases!)
-                {
-                    var command = (JProperty)jToken;
-                    var aliases = (JArray)command.Value;
-                    if (aliases.Any(alias => (string)alias! == message.Content.ToLower().Split('!')[1].Split(' ')[0]))
-                    {
-                        return (ECommandEnum)Enum.Parse(typeof(ECommandEnum), command.Name);
-                    }
-                }*/
 
                 foreach (var property in commandAliases.GetType().GetProperties())
                 {
@@ -49,7 +36,7 @@ public static class InteractionHandler
                 return ECommandEnum.None;
             }
         }
-        public static async Task HandleCommandReceive(SocketMessage message, string command)
+        private static async Task HandleCommandReceive(SocketMessage message, string command)
         {
             try
             {
@@ -334,17 +321,15 @@ public static class InteractionHandler
 
         public static async Task MessagePrefilter(SocketMessage message)
         {
+            // the assignment is literally used, what are you on about
+            // ReSharper disable once RedundantAssignment
             var passesLinkPrefilter = true;
             var serverConfiguration = JsonConvert.DeserializeObject<GuildConfiguration>(await File.ReadAllTextAsync($"App/Guilds/{((SocketGuildChannel)message.Channel).Guild.Id.ToString()}/GuildConfiguration.flare"))!;
             // literally only runs if i add this stupid console.writeline
             if (serverConfiguration.AutoModLinkFilter == true) Console.WriteLine("Link prefilter patch"); passesLinkPrefilter = !await CommandLogic.Moderation.Guild.AutoModLinkFilter.RunModLogic(message);
+            //  ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ like ???? youre literally delusional
             if (passesLinkPrefilter && message.Content.StartsWith(json.BotPrefix ?? "f!")) await HandleCommandReceive(message, message.Content[2..]);
             //scuffed but works so yeah
         }
-    }
-
-    public class ButtonInteractionHandler
-    {
-        
     }
 }

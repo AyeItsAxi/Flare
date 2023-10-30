@@ -1,5 +1,3 @@
-using System.Windows.Media.Animation;
-
 namespace Flare.Services;
 
 public class AnimationHandler

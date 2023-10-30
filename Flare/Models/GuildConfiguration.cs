@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Flare.Models;
 
 public class GuildConfiguration

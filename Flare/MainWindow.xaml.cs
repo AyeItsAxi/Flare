@@ -1,10 +1,8 @@
 ﻿//not declared in globals.cs cause ambiguous reference color between discord.color and whatever of these 3 libraries
 
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace Flare
 {
@@ -79,7 +77,6 @@ namespace Flare
             ClientCommandService.Log += Log;
             DiscordClient.MessageReceived += MessageReceivedAsync;
             DiscordClient.Ready += async () => await Application.Current.Dispatcher.InvokeAsync(OnClientReady);
-            //DiscordClient.Disconnected += OnClientDisconnected;
             await LoginDiscord();
         }
 
@@ -126,7 +123,7 @@ namespace Flare
             await Commands.InteractionHandler.CommandHandler.MessagePrefilter(message);
         }
         
-        private EStatusType GetStatusType()
+        private static EStatusType GetStatusType()
         {
             if (Enum.TryParse(json.StatusType, out EStatusType statusType))
             {
@@ -154,7 +151,7 @@ namespace Flare
         {
             foreach (var guild in DiscordClient.Guilds)
             {
-                if (!File.Exists($"App/Guilds/{guild.Id.ToString()}")) continue;
+                if (File.Exists($"App/Guilds/{guild.Id.ToString()}/GuildConfiguration.flare")) continue;
                 Directory.CreateDirectory($"App/Guilds/{guild.Id.ToString()}");
                 await File.WriteAllTextAsync($"App/Guilds/{guild.Id.ToString()}/GuildConfiguration.flare", JsonConvert.SerializeObject(new GuildConfiguration
                 {
@@ -307,10 +304,10 @@ namespace Flare
 
         private Task RunFlareFirstTimeSetup()
         {
-            this.Visibility = Visibility.Hidden;
+            Visibility = Visibility.Hidden;
             var ftsWin = new FTSComponents.FTSWindow();
             ftsWin.ShowDialog();
-            this.Visibility = Visibility.Visible;
+            Visibility = Visibility.Visible;
             return Task.CompletedTask;
         }
 

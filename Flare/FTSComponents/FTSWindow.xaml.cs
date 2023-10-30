@@ -1,5 +1,7 @@
 namespace Flare.FTSComponents;
 
+// bitch
+// ReSharper disable once InconsistentNaming
 public partial class FTSWindow
 {
     public FTSWindow()
