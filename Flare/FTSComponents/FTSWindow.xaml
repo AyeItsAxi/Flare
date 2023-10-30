@@ -1,0 +1,27 @@
+﻿<ui:UiWindow x:Class="Flare.FTSComponents.FTSWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        mc:Ignorable="d"
+        Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+        WindowCornerPreference="Round"
+        ExtendsContentIntoTitleBar="True"
+        WindowBackdropType="Mica"
+        ResizeMode="NoResize"
+        Title="FTSWindow" Height="450" Width="800">
+    <Grid Background="#0c0d10">
+        <Label x:Name="flareWelcomeLabel" Content="Welcome to Flare!" HorizontalAlignment="Left" Height="64" Margin="25,25,0,0" VerticalAlignment="Top" Width="419" FontSize="48" Foreground="#FFDBDEE1" FontFamily="Segoe UI Light"/>
+        <Label x:Name="label" Content="Just a few things and we'll get you on your way." HorizontalContentAlignment="Center" HorizontalAlignment="Center" Height="63" Margin="0,92,0,0" VerticalAlignment="Top" Width="734" FontSize="20" Foreground="#FFDBDEE1"/>
+        <Label x:Name="flareBuildInfo" Content="Version:&#x0d;&#x0a;Started at:" HorizontalContentAlignment="Right" VerticalContentAlignment="Center" HorizontalAlignment="Left" Height="64" Margin="400,32,0,0" VerticalAlignment="Top" Width="367" Foreground="#87BDBDBD"/>
+        <Label x:Name="devPortalGuide" Content="If you haven't already set up a bot in the developer portal, follow       guide" HorizontalContentAlignment="Center" HorizontalAlignment="Center" Height="63" VerticalAlignment="Top" Width="734" FontSize="20" Foreground="#FFDBDEE1" Margin="0,160,0,0"/>
+        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="3" HorizontalAlignment="Center" Height="7" Margin="0,136,0,0" VerticalAlignment="Top" Width="734" Background="Black"/>
+        <ui:PasswordBox x:Name="TokenBox" Margin="0,217,0,0" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" PlaceholderText="Bot Token" VerticalAlignment="Top" Width="670" MinWidth="670" MinHeight="35"/>
+        <ui:Button x:Name="saveButton" Content="Save" Height="35" Margin="0,274,0,0" VerticalAlignment="Top" Width="670" HorizontalAlignment="Center" Click="SaveButton_OnClick"/>
+        <ui:Hyperlink x:Name="hyperlink" Content="this" Height="34" Margin="0,155,54,0" VerticalAlignment="Top" FontSize="20" Hyperlink.Click="hyperlink_Click" Width="170" HorizontalAlignment="Right"/>
+        <Label x:Name="invalidToken" Foreground="#FFDBDEE1" Opacity="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Content="❌ Token is not valid." HorizontalAlignment="Center" Height="50" Margin="0,346,0,0" VerticalAlignment="Top" Width="670" FontSize="22"/>
+        <Border BorderBrush="Transparent" Background="Transparent" BorderThickness="1" HorizontalAlignment="Center" Height="57" VerticalAlignment="Top" Width="800" MouseDown="OnDragMove"/>
+
+    </Grid>
+</ui:UiWindow>

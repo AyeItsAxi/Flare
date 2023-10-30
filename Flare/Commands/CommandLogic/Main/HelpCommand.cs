@@ -5,35 +5,18 @@ public static class HelpCommand
     public static async Task RunCommandLogic(SocketMessage message)
     {
         ECommandEnum? requestedCommand = null;
-        if (message.Content.Length > 7)
-        {
-            var json = JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"));
-            var commandAliases = json["CommandAliases"];
-
-            foreach (var jToken in commandAliases!)
-            {
-                var command = (JProperty)jToken;
-                var aliases = (JArray)command.Value;
-                if (aliases.Any(alias => (string)alias! == message.Content.ToLower().Split(' ')[1]))
-                {
-                    requestedCommand = (ECommandEnum)Enum.Parse(typeof(ECommandEnum), command.Name);
-                    break;
-                }
-
-                requestedCommand = ECommandEnum.None;
-            }
-        }
+        MessageBox.Show(message.Content.Split(' ')[1]);
+        if (message.Content.Length > 7) requestedCommand = InteractionHandler.CommandHandler.InterpretCommand(message.Content.Split(' ')[1]);
         
         Embed helpEmbed;
-        var obj = JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"));
         var builder = new StringBuilder();
         switch (requestedCommand)
         {
             case ECommandEnum.Adios:
-                var adiosArray = (JArray)obj["CommandAliases"]?["Adios"]!;
+                var adiosArray = json.CommandAliases.Adios;
                 foreach (var item in adiosArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Adios Command")
@@ -44,10 +27,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Avatar:
-                var avatarArray = (JArray)obj["CommandAliases"]?["Avatar"]!;
+                var avatarArray = json.CommandAliases.Avatar;
                 foreach (var item in avatarArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Avatar Command")
@@ -57,10 +40,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Ban:
-                var banArray = (JArray)obj["CommandAliases"]?["Ban"]!;
+                var banArray = json.CommandAliases.Ban;
                 foreach (var item in banArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Ban Command")
@@ -70,10 +53,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Biden:
-                var bidenArray = (JArray)obj["CommandAliases"]?["Biden"]!;
+                var bidenArray = json.CommandAliases.Biden;
                 foreach (var item in bidenArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Biden Command")
@@ -84,10 +67,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.CarReverse:
-                var carReverseArray = (JArray)obj["CommandAliases"]?["CarReverse"]!;
+                var carReverseArray = json.CommandAliases.CarReverse;
                 foreach (var item in carReverseArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Car Reverse Command")
@@ -98,10 +81,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Cat:
-                var catArray = (JArray)obj["CommandAliases"]?["Cat"]!;
+                var catArray = json.CommandAliases.Cat;
                 foreach (var item in catArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Cat Command")
@@ -111,10 +94,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Dog:
-                var dogArray = (JArray)obj["CommandAliases"]?["Dog"]!;
+                var dogArray = json.CommandAliases.Dog;
                 foreach (var item in dogArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Dog Command")
@@ -124,10 +107,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Drip:
-                var dripArray = (JArray)obj["CommandAliases"]?["Drip"]!;
+                var dripArray = json.CommandAliases.Drip;
                 foreach (var item in dripArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Drip Command")
@@ -138,10 +121,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Github:
-                var githubArray = (JArray)obj["CommandAliases"]?["Github"]!;
+                var githubArray = json.CommandAliases.Github;
                 foreach (var item in githubArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Github Command")
@@ -151,10 +134,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Grave:
-                var graveArray = (JArray)obj["CommandAliases"]?["Grave"]!;
+                var graveArray = json.CommandAliases.Grave;
                 foreach (var item in graveArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Grave Command")
@@ -165,10 +148,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Heaven:
-                var heavenArray = (JArray)obj["CommandAliases"]?["Heaven"]!;
+                var heavenArray = json.CommandAliases.Heaven;
                 foreach (var item in heavenArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Heaven Command")
@@ -179,10 +162,10 @@ public static class HelpCommand
                 break;
             
             case ECommandEnum.Help:
-                var helpArray = (JArray)obj["CommandAliases"]?["Help"]!;
+                var helpArray = json.CommandAliases.Help;
                 foreach (var item in helpArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Help Command")
@@ -192,10 +175,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Kick:
-                var kickArray = (JArray)obj["CommandAliases"]?["Kick"]!;
+                var kickArray = json.CommandAliases.Kick;
                 foreach (var item in kickArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Kick Command")
@@ -205,10 +188,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Lyrics:
-                var lyricsArray = (JArray)obj["CommandAliases"]?["Lyrics"]!;
+                var lyricsArray = json.CommandAliases.Lyrics;
                 foreach (var item in lyricsArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Lyrics Command")
@@ -218,10 +201,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Mute:
-                var muteArray = (JArray)obj["CommandAliases"]?["Mute"]!;
+                var muteArray = json.CommandAliases.Mute;
                 foreach (var item in muteArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Mute Command")
@@ -231,10 +214,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Ping:
-                var pingArray = (JArray)obj["CommandAliases"]?["Ping"]!;
+                var pingArray = json.CommandAliases.Ping;
                 foreach (var item in pingArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Ping Command")
@@ -244,10 +227,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Purge:
-                var purgeArray = (JArray)obj["CommandAliases"]?["Purge"]!;
+                var purgeArray = json.CommandAliases.Purge;
                 foreach (var item in purgeArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Purge Command")
@@ -257,10 +240,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.SadCat:
-                var sadCatArray = (JArray)obj["CommandAliases"]?["SadCat"]!;
+                var sadCatArray = json.CommandAliases.SadCat;
                 foreach (var item in sadCatArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Sad Cat Command")
@@ -271,10 +254,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Softban:
-                var softbanArray = (JArray)obj["CommandAliases"]?["Softban"]!;
+                var softbanArray = json.CommandAliases.Softban;
                 foreach (var item in softbanArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Softban Command")
@@ -284,10 +267,10 @@ public static class HelpCommand
                 break;
             
             case ECommandEnum.Stats:
-                var statsArray = (JArray)obj["CommandAliases"]?["Stats"]!;
+                var statsArray = json.CommandAliases.Stats;
                 foreach (var item in statsArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Stats Command")
@@ -297,10 +280,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Unban:
-                var unbanArray = (JArray)obj["CommandAliases"]?["Unban"]!;
+                var unbanArray = json.CommandAliases.Unban;
                 foreach (var item in unbanArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Unban Command")
@@ -310,10 +293,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Unmute:
-                var unmuteArray = (JArray)obj["CommandAliases"]?["Unmute"]!;
+                var unmuteArray = json.CommandAliases.Unmute;
                 foreach (var item in unmuteArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Unmute Command")
@@ -323,10 +306,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Water:
-                var waterArray = (JArray)obj["CommandAliases"]?["Water"]!;
+                var waterArray = json.CommandAliases.Water;
                 foreach (var item in waterArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Adios Command")
@@ -337,10 +320,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Wide:
-                var wideArray = (JArray)obj["CommandAliases"]?["Wide"]!;
+                var wideArray = json.CommandAliases.Wide;
                 foreach (var item in wideArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Wide Command")
@@ -351,10 +334,10 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Wolverine:
-                var wolverineArray = (JArray)obj["CommandAliases"]?["Wolverine"]!;
+                var wolverineArray = json.CommandAliases.Wolverine;
                 foreach (var item in wolverineArray)
                 {
-                    builder.AppendLine(item.ToString());
+                    builder.AppendLine(item);
                 }
                 helpEmbed = new EmbedBuilder()
                     .WithTitle("Wolverine Command")
@@ -372,6 +355,33 @@ public static class HelpCommand
                     .WithFooter("Tip: use f!help CommandName to view what it does and aliases")
                     .Build();
                 break;
+            
+            case ECommandEnum.Lockdown:
+                var lockdownArray = json.CommandAliases.Lockdown;
+                foreach (var item in lockdownArray)
+                {
+                    builder.AppendLine(item);
+                }
+                helpEmbed = new EmbedBuilder()
+                    .WithTitle("Lockdown Command")
+                    .WithColor(Color.LightOrange)
+                    .WithDescription($"Disables the everyone role's ability to type in the channel the command is ran in. {Environment.NewLine + Environment.NewLine}Aliases: {builder}")
+                    .Build();
+                break;
+            
+            case ECommandEnum.ServerConfiguration_SetAutoModLinkFilter:
+                var serverConfigurationSetAutoModLinkFilterArray = json.CommandAliases.ServerConfiguration_SetAutoModLinkFilter;
+                foreach (var item in serverConfigurationSetAutoModLinkFilterArray)
+                {
+                    builder.AppendLine(item);
+                }
+                helpEmbed = new EmbedBuilder()
+                    .WithTitle("ServerConfiguration.SetAutoModLinkFilter Command")
+                    .WithColor(Color.LightOrange)
+                    .WithDescription($"Sets the server policy for the automatic link filter deleting policy {Environment.NewLine + Environment.NewLine}Aliases: {builder}")
+                    .Build();
+                break;
+            
             default:
                 var sb = new StringBuilder();
                 foreach (var item in Enum.GetValues(typeof(ECommandEnum)))

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Flare.Commands;
 
@@ -6,32 +7,54 @@ public static class InteractionHandler
 {
     public static class CommandHandler
     {
-        private static ECommandEnum InterpretCommand(IMessage message)
+        public static ECommandEnum InterpretCommand(string message)
         {
-            var json = JObject.Parse(File.ReadAllText("App/BotConfiguration.flare"));
-            var commandAliases = json["CommandAliases"];
-
-            foreach (var jToken in commandAliases!)
+            try
             {
-                var command = (JProperty)jToken;
-                var aliases = (JArray)command.Value;
-                if (aliases.Any(alias => (string)alias! == message.Content.ToLower().Split('!')[1].Split(' ')[0]))
-                {
-                    return (ECommandEnum)Enum.Parse(typeof(ECommandEnum), command.Name);
-                }
-            }
-            
-            
-            MessageBox.Show(message.Content.ToLower().Split('!')[1].Split(' ')[0].Replace('.', '_'));
+                var commandAliases = json.CommandAliases;
 
-            return ECommandEnum.None;
+                /*foreach (var jToken in commandAliases!)
+                {
+                    var command = (JProperty)jToken;
+                    var aliases = (JArray)command.Value;
+                    if (aliases.Any(alias => (string)alias! == message.Content.ToLower().Split('!')[1].Split(' ')[0]))
+                    {
+                        return (ECommandEnum)Enum.Parse(typeof(ECommandEnum), command.Name);
+                    }
+                }*/
+
+                foreach (var property in commandAliases.GetType().GetProperties())
+                {
+                    var aliases = (List<string>)property.GetValue(commandAliases)!;
+                    if (aliases.Any(alias => alias == message.ToLower().Split('!')[1].Split(' ')[0]))
+                    {
+                        return (ECommandEnum)Enum.Parse(typeof(ECommandEnum), property.Name);
+                    }
+                }
+
+                return ECommandEnum.None;
+            }
+            catch (IndexOutOfRangeException)
+            {
+                var commandAliases = json.CommandAliases;
+                foreach (var property in commandAliases.GetType().GetProperties())
+                {
+                    var aliases = (List<string>)property.GetValue(commandAliases)!;
+                    if (aliases.Any(alias => alias == message.ToLower()))
+                    {
+                        return (ECommandEnum)Enum.Parse(typeof(ECommandEnum), property.Name);
+                    }
+                }
+
+                return ECommandEnum.None;
+            }
         }
         public static async Task HandleCommandReceive(SocketMessage message, string command)
         {
             try
             {
                 var avatarUrl = message.MentionedUsers.Count != 0 ? message.MentionedUsers.First().GetAvatarUrl(ImageFormat.WebP, 4096) : message.Author.GetAvatarUrl(ImageFormat.WebP, 4096);
-                switch (InterpretCommand(message))
+                switch (InterpretCommand(message.Content))
                 {
                     case ECommandEnum.Adios:
                         await CommandLogic.Main.AdiosCommand.RunCommandLogic(message, avatarUrl);
@@ -178,8 +201,6 @@ public static class InteractionHandler
                     
                     case ECommandEnum.Ping:
                         await CommandLogic.Main.PingCommand.RunCommandLogic(message);
-                        //DONOTSHIP: testing: var sgc = (SocketGuildChannel)message.Channel;
-                        //await sgc.AddPermissionOverwriteAsync(sgc.Guild.EveryoneRole, OverwritePermissions.DenyAll(message.Channel));
                         break;
                     
                     case ECommandEnum.Purge:
@@ -317,7 +338,7 @@ public static class InteractionHandler
             var serverConfiguration = JsonConvert.DeserializeObject<GuildConfiguration>(await File.ReadAllTextAsync($"App/Guilds/{((SocketGuildChannel)message.Channel).Guild.Id.ToString()}/GuildConfiguration.flare"))!;
             // literally only runs if i add this stupid console.writeline
             if (serverConfiguration.AutoModLinkFilter == true) Console.WriteLine("Link prefilter patch"); passesLinkPrefilter = !await CommandLogic.Moderation.Guild.AutoModLinkFilter.RunModLogic(message);
-            if (passesLinkPrefilter && message.Content.StartsWith(JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"))["BotPrefix"]?.ToString() ?? "f!")) await HandleCommandReceive(message, message.Content[2..]);
+            if (passesLinkPrefilter && message.Content.StartsWith(json.BotPrefix ?? "f!")) await HandleCommandReceive(message, message.Content[2..]);
             //scuffed but works so yeah
         }
     }

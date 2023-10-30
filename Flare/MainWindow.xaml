@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:gif="https://github.com/XamlAnimatedGif/XamlAnimatedGif"
         mc:Ignorable="d" Background="#0c0d10"
         Title="Flare Control Panel" Height="450" Width="800"
         ExtendsContentIntoTitleBar="True"
@@ -72,7 +73,7 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid>
+    <Grid Background="#0c0d10">
         <Grid MouseDown="TitleBarMouseDown" Background="#0c0d10" Height="29" HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <Grid x:Name="Buttons" HorizontalAlignment="Right">
                 <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Right" Orientation="Horizontal">
@@ -129,5 +130,9 @@
                 <Ellipse x:Name="BotStatusEllipse" HorizontalAlignment="Left" Height="18" Margin="62,73,0,0" Fill="#80848e" VerticalAlignment="Top" Width="18" Opacity="1"/>
             </Grid>
         </Border>
+        <Grid Name="ApplicationLoading">
+            <Border Name="ApplicationCover" BorderBrush="Black" BorderThickness="1" Opacity="0.8" HorizontalAlignment="Center" Height="436" VerticalAlignment="Center" Width="800" Background="Black"/>
+            <Image Name="ApplicationLoader" gif:AnimationBehavior.SourceUri="/Lib/Graphics/Loader.gif" Margin="381,193,371,193" />
+        </Grid>
     </Grid>
 </ui:UiWindow>

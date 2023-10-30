@@ -1,10 +1,10 @@
 ﻿//not declared in globals.cs cause ambiguous reference color between discord.color and whatever of these 3 libraries
 
-using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Newtonsoft.Json;
+using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace Flare
 {
@@ -27,20 +27,21 @@ namespace Flare
             await InitiateDiscordAuthflow();
         }
 
-        private static Task CheckIsNewInstance()
+        private async Task CheckIsNewInstance()
         {
-            if (!Directory.Exists("App")) return Task.CompletedTask;
+            if (Directory.Exists("App")) return;
             Directory.CreateDirectory("App");
             Directory.CreateDirectory("App/Guilds");
             Directory.CreateDirectory("App/Guilds/Channels");
-
-            return Task.CompletedTask;
+            await File.WriteAllTextAsync("App/BotConfiguration.flare", "{\n  \"BotPrefix\": \"f!\",\n  \"BotToken\": \"\",\n  \"StatusType\": \"CUSTOM\",\n  \"StatusContent\": \"\",\n  \"CommandAliases\": {\n    \"Adios\": [\n      \"adios\",\n      \"adiosmeme\",\n      \"adiosimage\"\n    ],\n    \"Avatar\": [\n      \"pfp\",\n      \"avatar\",\n      \"av\",\n      \"profilepicture\"\n    ],\n    \"Ban\": [\n      \"ban\",\n      \"banuser\",\n      \"banmember\",\n      \"banaccount\"\n    ],\n    \"Biden\": [\n      \"biden\",\n      \"bidenmeme\",\n      \"bidentweet\",\n      \"bidenimage\"\n    ],\n    \"CarReverse\": [\n      \"carreverse\",\n      \"carmeme\",\n      \"reversememe\",\n      \"carimage\",\n      \"carreverseimage\",\n      \"reverseimage\"\n    ],\n    \"Cat\": [\n      \"cat\",\n      \"meow\",\n      \"kitty\",\n      \"kitten\",\n      \"cato\"\n    ],\n    \"Dog\": [\n      \"dog\",\n      \"woof\",\n      \"inferioranimal\",\n      \"bark\"\n    ],\n    \"Drip\": [\n      \"drip\",\n      \"drippy\"\n    ],\n    \"Github\": [\n      \"github\",\n      \"githubprofile\",\n      \"githubstats\",\n      \"githubprofilestats\"\n    ],\n    \"Grave\": [\n      \"grave\",\n      \"gravememe\"\n    ],\n    \"Heaven\": [\n      \"heaven\",\n      \"heavenmeme\"\n    ],\n    \"Help\": [\n      \"help\",\n      \"bothelp\",\n      \"commands\",\n      \"allcommands\",\n      \"commandlist\"\n    ],\n    \"Kick\": [\n      \"kick\",\n      \"kickuser\",\n      \"kickmember\"\n    ],\n    \"Lockdown\": [\n      \"lockdown\",\n      \"lockdownchannel\"\n    ],\n    \"Lyrics\": [\n      \"lyrics\",\n      \"findlyrics\",\n      \"getlyrics\",\n      \"fetchlyrics\",\n      \"songlyrics\"\n    ],\n    \"Mute\": [\n      \"mute\",\n      \"muteuser\",\n      \"mutemember\"\n    ],\n    \"Ping\": [\n      \"ping\",\n      \"botping\",\n      \"latency\",\n      \"delay\",\n      \"lag\"\n    ],\n    \"Purge\": [\n      \"purge\",\n      \"purgecommand\",\n      \"purgechat\",\n      \"purgechannel\"\n    ],\n    \"SadCat\": [\n      \"sadcat\",\n      \"sadcatmeme\"\n    ],\n    \"ServerConfiguration_SetAutoModLinkFilter\": [\n      \"serverconfiguration.setautomodlinkfilter\",\n      \"serverconfiguration.automodlinkfilter\",\n      \"serverconfiguration.linkfilter\",\n      \"setlinkfilter\",\n      \"linkfilter\",\n      \"filterlinks\"\n    ],\n    \"Softban\": [\n      \"softban\",\n      \"softbanuser\",\n      \"softbanmember\"\n    ],\n    \"Stats\": [\n      \"stats\",\n      \"info\",\n      \"botstats\"\n    ],\n    \"Unban\": [\n      \"unban\",\n      \"unbanuser\",\n      \"unbanmember\"\n    ],\n    \"Unmute\": [\n      \"unmute\",\n      \"unmuteuser\",\n      \"unmutemember\"\n    ],\n    \"Water\": [\n      \"water\",\n      \"watermeme\"\n    ],\n    \"Wide\": [\n      \"wide\",\n      \"widememe\",\n      \"wideimage\"\n    ],\n    \"Wolverine\": [\n      \"wolverine\",\n      \"wolverinememe\",\n      \"wolverineimage\"\n    ]\n  }\n}");
+            json = JsonConvert.DeserializeObject<BotConfiguration.Root>(await File.ReadAllTextAsync("App/BotConfiguration.flare"))!;
+            await RunFlareFirstTimeSetup();
         }
 
         private async Task CheckIsNewCompile()
         {
             const string buildCfgPath = "../../../Build.flare";
-            if (!File.Exists(buildCfgPath)) return;
+            if (!File.Exists("App/Build.flare") && !File.Exists(buildCfgPath)) return;
             var rss = JObject.Parse(await File.ReadAllTextAsync(buildCfgPath));
             var buildNumber = Convert.ToInt32(rss["FlareBuildNumber"]);
             buildNumber++;
@@ -48,8 +49,10 @@ namespace Flare
             await File.WriteAllTextAsync(buildCfgPath, rss.ToString());
             //Redundant re-parse, improves code readability however
             rss = JObject.Parse(await File.ReadAllTextAsync(buildCfgPath));
-            FlareBuildVersion = $"Flare 0.1 - major={rss["FlareBuildName"]!.ToString().ToLower().Split(' ')[1]};build={rss["FlareBuildNumber"]};special=false;type=base";
+            FlareBuildVersion = $"Flare {rss["FlareBuildVersion"]} - major={rss["FlareBuildName"]!.ToString().ToLower().Split(' ')[1]};build={rss["FlareBuildNumber"]};special={rss["Special"]};type={rss["Type"]}";
             FlareBuildInformation.Content = $"{rss["FlareBuildName"]}, Version {rss["FlareBuildVersion"]}, Build {rss["FlareBuildNumber"]}.";
+            if (!File.Exists(buildCfgPath)) return;
+            File.Copy(buildCfgPath, "App/Build.flare", true);
         }
 
         private static Task ClearLog()
@@ -76,14 +79,15 @@ namespace Flare
             ClientCommandService.Log += Log;
             DiscordClient.MessageReceived += MessageReceivedAsync;
             DiscordClient.Ready += async () => await Application.Current.Dispatcher.InvokeAsync(OnClientReady);
+            //DiscordClient.Disconnected += OnClientDisconnected;
             await LoginDiscord();
         }
 
         private async Task LoginDiscord()
         {
             _bIsPendingRestart = false;
-            var rss = JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"));
-            await DiscordClient.LoginAsync(TokenType.Bot, rss["BotToken"]!.ToString());
+            json = JsonConvert.DeserializeObject<BotConfiguration.Root>(await File.ReadAllTextAsync("App/BotConfiguration.flare"))!;
+            await DiscordClient.LoginAsync(TokenType.Bot, json.BotToken);
             await DiscordClient.StartAsync();
             while (!_bIsPendingRestart)
             {
@@ -97,6 +101,8 @@ namespace Flare
         private async Task Log(LogMessage log)
         {
             await File.AppendAllTextAsync("App/DiscordLog.flare", log.ToString());
+            // scuffed way of doing it because Discord.Net doesnt have any native way of executing code on error
+            if (log.ToString().Contains("Disconnected")) await Dispatcher.InvokeAsync(OnClientDisconnected);
             // non ui thread, use invokeasync so text actually updates when called from discord.net's native logger
             await Dispatcher.InvokeAsync(() => FlareOutput.Content = log.ToString().Replace("     ", " "));
         }
@@ -120,10 +126,9 @@ namespace Flare
             await Commands.InteractionHandler.CommandHandler.MessagePrefilter(message);
         }
         
-        private static EStatusType GetStatusType()
+        private EStatusType GetStatusType()
         {
-            var json = JObject.Parse(File.ReadAllText("App/BotConfiguration.flare"))["StatusType"]!.ToString();
-            if (Enum.TryParse(json, out EStatusType statusType))
+            if (Enum.TryParse(json.StatusType, out EStatusType statusType))
             {
                 return statusType;
             }
@@ -159,6 +164,23 @@ namespace Flare
             await UpdateUiComponents();
         }
         
+        private async Task OnClientDisconnected()//Exception exception)
+        {
+            if (json.BotToken.Length > 50) return; // connection errors should only ever be caused by an invalid token. if the token is valid, then the error is on discord's end.
+            new ToastContentBuilder()
+                .AddArgument("action", "viewConversation")
+                .AddArgument("conversationId", 9813)
+                .AddText("Flare Control Panel")
+                .AddText("Something has goofed.")
+                .AddText("Please go through the First Time Setup once more.")
+                .Show();
+            await DiscordClient.LogoutAsync();
+            await RunFlareFirstTimeSetup();
+            _bIsPendingRestart = true;
+            await Task.Delay(500);
+            await LoginDiscord();
+        }
+        
         private async Task UpdateUiComponents()
         {
             Bitmap bitmap;
@@ -179,7 +201,7 @@ namespace Flare
                 EStatusType.LISTENING => ListeningStatus,
                 _ => CustomStatus
             };
-            var statusTypeFromJson = JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"))["StatusType"]!.ToString() switch
+            var statusTypeFromJson = json.StatusType switch
             {
                 "PLAYING" => "Playing ",
                 "STREAMING" => "Streaming ",
@@ -191,11 +213,11 @@ namespace Flare
             };
             StatusSelect.SelectedItem = selectedDdb;
             BotUserName.Text = DiscordClient.CurrentUser.Username;
-            var statusStr = JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"))["StatusContent"]!.ToString();
+            var statusStr = json.StatusContent;
             StatusTypePreview.Text = statusTypeFromJson;
             StatusPreview.Text = statusStr;
             StatusText.Text = statusStr;
-            TokenBox.Text = JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"))["BotToken"]!.ToString();
+            TokenBox.Text = json.BotToken;
             var activityType = statusType switch
             {
                 EStatusType.PLAYING => ActivityType.Playing,
@@ -208,6 +230,9 @@ namespace Flare
             };
             await UpdateBotStatus(StatusText.Text, activityType);
             BotStatusEllipse.Fill = (System.Windows.Media.Brush)new BrushConverter().ConvertFromString("#30a65c")!;
+            AnimationHandler.FadeOut(ApplicationLoading, 0.3);
+            await Task.Delay(300);
+            ApplicationLoading.Visibility = Visibility.Hidden;
         }
         
         #pragma warning restore SYSLIB0014
@@ -216,7 +241,7 @@ namespace Flare
 
         private void MaximizeClick(object sender, RoutedEventArgs e) => WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
 
-        private void CloseClick(object sender, RoutedEventArgs e) => Close();
+        private void CloseClick(object sender, RoutedEventArgs e) => Environment.Exit(1738);
 
         private int _iLoadCrashPrevention;
 
@@ -253,9 +278,9 @@ namespace Flare
 
         private async void OnTokenSave(object sender, RoutedEventArgs e)
         {
-            var json = JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"));
-            json["BotToken"] = TokenBox.Password;
-            await File.WriteAllTextAsync("App/BotConfiguration.flare", json.ToString());
+            json.BotToken = TokenBox.Password;
+            await File.WriteAllTextAsync("App/BotConfiguration.flare", JsonConvert.SerializeObject(json));
+            AnimationHandler.FadeIn(ApplicationLoading, 0.3);
             await DiscordClient.LogoutAsync();
             _bIsPendingRestart = true;
             await Task.Delay(500);
@@ -264,9 +289,8 @@ namespace Flare
 
         private async void OnStatusSave(object sender, RoutedEventArgs e)
         {
-            var json = JObject.Parse(await File.ReadAllTextAsync("App/BotConfiguration.flare"));
-            json["StatusType"] = Enum.GetName(_statusType.GetType(), _statusType);
-            json["StatusContent"] = StatusText.Text;
+            json.StatusType = Enum.GetName(_statusType.GetType(), _statusType);
+            json.StatusContent = StatusText.Text;
             var activityType = _statusType switch
             {
                 EStatusType.PLAYING => ActivityType.Playing,
@@ -278,13 +302,19 @@ namespace Flare
                 _ => ActivityType.CustomStatus
             };
             await UpdateBotStatus(StatusText.Text, activityType);
-            await File.WriteAllTextAsync("App/BotConfiguration.flare", json.ToString());
+            await File.WriteAllTextAsync("App/BotConfiguration.flare", JsonConvert.SerializeObject(json));
         }
 
-        private static async Task UpdateBotStatus(string content, ActivityType activityType)
+        private Task RunFlareFirstTimeSetup()
         {
-            await DiscordClient.SetActivityAsync(new Game(content, activityType));
+            this.Visibility = Visibility.Hidden;
+            var ftsWin = new FTSComponents.FTSWindow();
+            ftsWin.ShowDialog();
+            this.Visibility = Visibility.Visible;
+            return Task.CompletedTask;
         }
+
+        private static async Task UpdateBotStatus(string content, ActivityType activityType) => await DiscordClient.SetActivityAsync(new Game(content, activityType));
 
         private void OnStatusTextKeyDown(object sender, RoutedEventArgs e) => StatusPreview.Text = StatusText.Text;
     }

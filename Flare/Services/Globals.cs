@@ -7,6 +7,7 @@ global using System.Text;
 global using Flare.Models;
 global using Flare.Services;
 global using System.Windows;
+global using Newtonsoft.Json;
 global using Discord.Commands;
 global using Discord.WebSocket;
 global using System.Management;
