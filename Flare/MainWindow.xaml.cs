@@ -64,6 +64,7 @@ namespace Flare
         /* DISCORD: Authflow */
         private async Task InitiateDiscordAuthflow()
         {
+            json = JsonConvert.DeserializeObject<BotConfiguration.Root>(await File.ReadAllTextAsync("App/BotConfiguration.flare"))!;
             DiscordClient = new DiscordSocketClient(new DiscordSocketConfig
             {
                 GatewayIntents = GatewayIntents.All | GatewayIntents.MessageContent

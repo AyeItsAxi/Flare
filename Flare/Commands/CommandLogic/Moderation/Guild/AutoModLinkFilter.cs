@@ -27,7 +27,10 @@ public static partial class AutoModLinkFilter
         await message.Channel.SendMessageAsync("Successfully set AutoModLinkFilter to " + Convert.ToBoolean(message.Content.Split(' ')[1].Replace("0", "false").Replace("1", "true")));
     }
 
-    private static bool IsViolating(IMessage message) => MyRegex().IsMatch(message.Content);
+    private static bool IsViolating(IMessage message)
+    {
+        return !((SocketGuildUser)message.Author).GuildPermissions.Has(GuildPermission.EmbedLinks) && MyRegex().IsMatch(message.Content);
+    }
     
     [GeneratedRegex("(http|https)://[^\\s]+")]
     private static partial Regex MyRegex();

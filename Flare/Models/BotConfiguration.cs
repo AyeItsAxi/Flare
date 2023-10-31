@@ -46,7 +46,7 @@ public class BotConfiguration
         public string BotToken { get; set; }
         public string StatusType { get; set; }
         public string StatusContent { get; set; }
-        public CommandAliases CommandAliases { get; }
+        public CommandAliases CommandAliases { get; } = new();
     }
 #nullable enable
 

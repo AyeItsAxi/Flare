@@ -9,7 +9,6 @@ public static class InteractionHandler
             try
             {
                 var commandAliases = json.CommandAliases;
-
                 foreach (var property in commandAliases.GetType().GetProperties())
                 {
                     var aliases = (List<string>)property.GetValue(commandAliases)!;
@@ -324,9 +323,7 @@ public static class InteractionHandler
             // the assignment is literally used, what are you on about
             // ReSharper disable once RedundantAssignment
             var passesLinkPrefilter = true;
-            var serverConfiguration = JsonConvert.DeserializeObject<GuildConfiguration>(await File.ReadAllTextAsync($"App/Guilds/{((SocketGuildChannel)message.Channel).Guild.Id.ToString()}/GuildConfiguration.flare"))!;
-            // literally only runs if i add this stupid console.writeline
-            if (serverConfiguration.AutoModLinkFilter == true) Console.WriteLine("Link prefilter patch"); passesLinkPrefilter = !await CommandLogic.Moderation.Guild.AutoModLinkFilter.RunModLogic(message);
+            if (JsonConvert.DeserializeObject<GuildConfiguration>(await File.ReadAllTextAsync($"App/Guilds/{((SocketGuildChannel)message.Channel).Guild.Id.ToString()}/GuildConfiguration.flare"))!.AutoModLinkFilter == true) passesLinkPrefilter = !await CommandLogic.Moderation.Guild.AutoModLinkFilter.RunModLogic(message);
             //  ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ like ???? youre literally delusional
             if (passesLinkPrefilter && message.Content.StartsWith(json.BotPrefix ?? "f!")) await HandleCommandReceive(message, message.Content[2..]);
             //scuffed but works so yeah
