@@ -14,6 +14,7 @@ namespace Flare
         public MainWindow()
         {
             InitializeComponent();
+            ApplicationLoading.Visibility = Visibility.Visible;
             InitializeAsyncLoaders();
         }
 
@@ -33,6 +34,7 @@ namespace Flare
             Directory.CreateDirectory("App/Guilds/Channels");
             await File.WriteAllTextAsync("App/BotConfiguration.flare", "{\n  \"BotPrefix\": \"f!\",\n  \"BotToken\": \"\",\n  \"StatusType\": \"CUSTOM\",\n  \"StatusContent\": \"\",\n  \"CommandAliases\": {\n    \"Adios\": [\n      \"adios\",\n      \"adiosmeme\",\n      \"adiosimage\"\n    ],\n    \"Avatar\": [\n      \"pfp\",\n      \"avatar\",\n      \"av\",\n      \"profilepicture\"\n    ],\n    \"Ban\": [\n      \"ban\",\n      \"banuser\",\n      \"banmember\",\n      \"banaccount\"\n    ],\n    \"Biden\": [\n      \"biden\",\n      \"bidenmeme\",\n      \"bidentweet\",\n      \"bidenimage\"\n    ],\n    \"CarReverse\": [\n      \"carreverse\",\n      \"carmeme\",\n      \"reversememe\",\n      \"carimage\",\n      \"carreverseimage\",\n      \"reverseimage\"\n    ],\n    \"Cat\": [\n      \"cat\",\n      \"meow\",\n      \"kitty\",\n      \"kitten\",\n      \"cato\"\n    ],\n    \"Dog\": [\n      \"dog\",\n      \"woof\",\n      \"inferioranimal\",\n      \"bark\"\n    ],\n    \"Drip\": [\n      \"drip\",\n      \"drippy\"\n    ],\n    \"Github\": [\n      \"github\",\n      \"githubprofile\",\n      \"githubstats\",\n      \"githubprofilestats\"\n    ],\n    \"Grave\": [\n      \"grave\",\n      \"gravememe\"\n    ],\n    \"Heaven\": [\n      \"heaven\",\n      \"heavenmeme\"\n    ],\n    \"Help\": [\n      \"help\",\n      \"bothelp\",\n      \"commands\",\n      \"allcommands\",\n      \"commandlist\"\n    ],\n    \"Kick\": [\n      \"kick\",\n      \"kickuser\",\n      \"kickmember\"\n    ],\n    \"Lockdown\": [\n      \"lockdown\",\n      \"lockdownchannel\"\n    ],\n    \"Lyrics\": [\n      \"lyrics\",\n      \"findlyrics\",\n      \"getlyrics\",\n      \"fetchlyrics\",\n      \"songlyrics\"\n    ],\n    \"Mute\": [\n      \"mute\",\n      \"muteuser\",\n      \"mutemember\"\n    ],\n    \"Ping\": [\n      \"ping\",\n      \"botping\",\n      \"latency\",\n      \"delay\",\n      \"lag\"\n    ],\n    \"Purge\": [\n      \"purge\",\n      \"purgecommand\",\n      \"purgechat\",\n      \"purgechannel\"\n    ],\n    \"SadCat\": [\n      \"sadcat\",\n      \"sadcatmeme\"\n    ],\n    \"ServerConfiguration_SetAutoModLinkFilter\": [\n      \"serverconfiguration.setautomodlinkfilter\",\n      \"serverconfiguration.automodlinkfilter\",\n      \"serverconfiguration.linkfilter\",\n      \"setlinkfilter\",\n      \"linkfilter\",\n      \"filterlinks\"\n    ],\n    \"Softban\": [\n      \"softban\",\n      \"softbanuser\",\n      \"softbanmember\"\n    ],\n    \"Stats\": [\n      \"stats\",\n      \"info\",\n      \"botstats\"\n    ],\n    \"Unban\": [\n      \"unban\",\n      \"unbanuser\",\n      \"unbanmember\"\n    ],\n    \"Unmute\": [\n      \"unmute\",\n      \"unmuteuser\",\n      \"unmutemember\"\n    ],\n    \"Water\": [\n      \"water\",\n      \"watermeme\"\n    ],\n    \"Wide\": [\n      \"wide\",\n      \"widememe\",\n      \"wideimage\"\n    ],\n    \"Wolverine\": [\n      \"wolverine\",\n      \"wolverinememe\",\n      \"wolverineimage\"\n    ]\n  }\n}");
             json = JsonConvert.DeserializeObject<BotConfiguration.Root>(await File.ReadAllTextAsync("App/BotConfiguration.flare"))!;
+            //PfConfig = JsonConvert.DeserializeObject<ProfileConfiguration>(await File.ReadAllTextAsync("App/ProfileConfiguration.flare"))!;
             await RunFlareFirstTimeSetup();
         }
 
@@ -101,8 +103,6 @@ namespace Flare
             await File.AppendAllTextAsync("App/DiscordLog.flare", log.ToString());
             // scuffed way of doing it because Discord.Net doesnt have any native way of executing code on error
             if (log.ToString().Contains("Disconnected")) await Dispatcher.InvokeAsync(OnClientDisconnected);
-            // non ui thread, use invokeasync so text actually updates when called from discord.net's native logger
-            await Dispatcher.InvokeAsync(() => FlareOutput.Content = log.ToString().Replace("     ", " "));
         }
 
 
@@ -315,5 +315,13 @@ namespace Flare
         private static async Task UpdateBotStatus(string content, ActivityType activityType) => await DiscordClient.SetActivityAsync(new Game(content, activityType));
 
         private void OnStatusTextKeyDown(object sender, RoutedEventArgs e) => StatusPreview.Text = StatusText.Text;
+
+        private void OnConfigurationSave(object sender, RoutedEventArgs e)
+        {
+            if (StatusText.Text != json.StatusContent || StatusSelect.SelectedIndex != (int)GetStatusType())
+            {
+                OnStatusSave(sender, e);
+            }
+        }
     }
 }

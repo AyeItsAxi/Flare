@@ -96,9 +96,7 @@
             </Grid>
         </Grid>
         <Label x:Name="FlareBuildInformation" Content="Flare" HorizontalAlignment="Left" Height="26" Margin="10,410,0,0" VerticalAlignment="Top" Width="390" Foreground="#FF969696"/>
-        <Label x:Name="FlareOutput" Content="Flare will output debug information here." HorizontalAlignment="Center" Height="60" Margin="0,351,0,0" VerticalAlignment="Top" Width="738" Foreground="#FF969696" FontSize="34"/>
-        <ui:PasswordBox x:Name="TokenBox" Margin="80,223,0,176" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" PlaceholderText="Bot Token" VerticalAlignment="Top" Width="500" MinWidth="500" MinHeight="35"/>
-        <ui:Button x:Name="TokenSave" Content="Save" Height="34" Margin="600,224,0,0" VerticalAlignment="Top" Width="120" Click="OnTokenSave"/>
+        <ui:PasswordBox x:Name="TokenBox" Margin="0,223,0,0" HorizontalAlignment="Center" TextWrapping="Wrap" Text="" PlaceholderText="Bot Token" VerticalAlignment="Top" Width="640" MinWidth="640" MinHeight="35"/>
         <ComboBox x:Name="StatusSelect" MinWidth="130" MinHeight="30" HorizontalAlignment="Left" Height="40" Margin="80,281,0,0" VerticalAlignment="Top" Width="130" SelectedIndex="0" SelectionChanged="StatusSelect_OnSelected">
             <TextBlock Name="PlayingStatus" Text="Playing"/>
             <TextBlock Name="StreamingStatus" Text="Streaming"/>
@@ -107,8 +105,7 @@
             <TextBlock Name="CompetingStatus" Text="Competing in"/>
             <TextBlock Name="CustomStatus" Text="(Custom)"/>
         </ComboBox>
-        <ui:TextBox x:Name="StatusText" HorizontalAlignment="Left" Height="40" Margin="230,281,0,0" MinWidth="350" MinHeight="37" TextWrapping="Wrap" Text="" PlaceholderText="a really cool game" VerticalAlignment="Top" Width="350" TextChanged="OnStatusTextKeyDown"/>
-        <ui:Button x:Name="StatusSave" Content="Save" Height="37" Margin="600,281,0,0" VerticalAlignment="Top" Width="120" Click="OnStatusSave"/>
+        <ui:TextBox x:Name="StatusText" HorizontalAlignment="Left" Height="40" Margin="230,281,0,0" MinWidth="490" MinHeight="37" TextWrapping="Wrap" Text="" PlaceholderText="a really cool game" VerticalAlignment="Top" Width="490" TextChanged="OnStatusTextKeyDown"/>
         <Border BorderBrush="Black" BorderThickness="0" Background="#1a1b1e" CornerRadius="5" HorizontalAlignment="Center" Height="130" Margin="0,61,0,0" VerticalAlignment="Top" Width="640">
             <Grid>
                 <Border Background="#403582" HorizontalAlignment="Center" Height="52" VerticalAlignment="Top" Width="640" CornerRadius="5"/>
@@ -130,9 +127,16 @@
                 <Ellipse x:Name="BotStatusEllipse" HorizontalAlignment="Left" Height="18" Margin="62,73,0,0" Fill="#80848e" VerticalAlignment="Top" Width="18" Opacity="1"/>
             </Grid>
         </Border>
-        <Grid Name="ApplicationLoading">
+        <ComboBox x:Name="ProfileSelect" MinWidth="450" MinHeight="30" HorizontalAlignment="Left" Height="40" Margin="130,337,0,0" VerticalAlignment="Top" Width="450" SelectedIndex="0" HorizontalContentAlignment="Left" SelectionChanged="StatusSelect_OnSelected">
+            <TextBlock Name="Profile1Select" Text="Profile 1 - None"/>
+            <TextBlock Name="Profile2Select" Text="Profile 2 - None"/>
+            <TextBlock Name="Profile3Select" Text="Profile 3 - None"/>
+        </ComboBox>
+        <Grid Name="ApplicationLoading" Visibility="Hidden">
             <Border Name="ApplicationCover" BorderBrush="Black" BorderThickness="1" Opacity="0.8" HorizontalAlignment="Center" Height="436" VerticalAlignment="Center" Width="800" Background="Black"/>
             <Image Name="ApplicationLoader" gif:AnimationBehavior.SourceUri="/Lib/Graphics/Loader.gif" Margin="381,193,371,193" />
         </Grid>
+        <ui:TextBox x:Name="prefixBox" PlaceholderText="f!" MinWidth="35" MinHeight="35" MaxWidth="65" MaxHeight="35" HorizontalAlignment="Left" Height="35" Margin="80,337,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="35"/>
+        <ui:Button x:Name="saveConfiguration" Content="Save" Height="37" Margin="600,337,0,0" VerticalAlignment="Top" Width="120" Click="OnConfigurationSave"/>
     </Grid>
 </ui:UiWindow>
