@@ -41,7 +41,7 @@ namespace Flare
         private async Task CheckIsNewCompile()
         {
             const string buildCfgPath = "../../../Build.flare";
-            if (!File.Exists("App/Build.flare") && !File.Exists(buildCfgPath)) return;
+            if (!File.Exists("App/Build.flare") || !File.Exists(buildCfgPath)) return;
             var rss = JObject.Parse(await File.ReadAllTextAsync(buildCfgPath));
             var buildNumber = Convert.ToInt32(rss["FlareBuildNumber"]);
             buildNumber++;
