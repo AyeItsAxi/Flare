@@ -70,7 +70,7 @@ namespace Flare
             await RunFlareFirstTimeSetup();
         }
 
-        private static async Task EnsureFileExists()
+        private async Task EnsureFileExists()
         {
             if (!File.Exists("App/ProfileConfiguration.flare"))
             {
@@ -103,9 +103,37 @@ namespace Flare
                     }
                 }));
             }
-            
-            Variables.ProfileConfiguration = JsonConvert.DeserializeObject<ProfileConfiguration>(await File.ReadAllTextAsync("App/ProfileConfiguration.flare"))!;
+            Variables.ProfileConfiguration = JsonConvert.DeserializeObject<ProfileConfiguration>(JsonConvert.SerializeObject(new ProfileConfiguration
+            {
+                SelectedProfile = 1,
+                Profile1 = new ProfileData
+                {
+                    BotPrefix = "f!",
+                    BotToken = "",
+                    StatusContent = "for f!help",
+                    StatusType = "WATCHING",
+                    AccountName = "None"
+                },
+                Profile2 = new ProfileData
+                {
+                    BotPrefix = "f!",
+                    BotToken = "",
+                    StatusContent = "for f!help",
+                    StatusType = "WATCHING",
+                    AccountName = "None"
+                },
+                Profile3 = new ProfileData
+                {
+                    BotPrefix = "f!",
+                    BotToken = "",
+                    StatusContent = "for f!help",
+                    StatusType = "WATCHING",
+                    AccountName = "None"
+                }
+            }))!;
             SelectedProfileData = Variables.ProfileConfiguration.Profile1;
+
+            CheckNeedsFts();
         }
 
         private async Task CheckIsNewCompile()
@@ -287,10 +315,8 @@ namespace Flare
                     .AddArgument("action", "viewConversation")
                     .AddArgument("conversationId", 9813)
                     .AddText("Flare Control Panel")
-                    .AddText("Something has goofed.")
-                    .AddText("Please go through the First Time Setup once more.")
+                    .AddText("Please go through the First Time Setup")
                     .Show();
-            await DiscordClient.LogoutAsync();
             await RunFlareFirstTimeSetup();
         }
         

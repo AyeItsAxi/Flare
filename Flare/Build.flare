@@ -1,7 +1,7 @@
 {
   "FlareBuildName": "Flare Alpha",
   "FlareBuildVersion": "0.3",
-  "FlareBuildNumber": 446,
-  "Special": "false",
-  "Type": "base"
+  "FlareBuildNumber": 447,
+  "Special": "true",
+  "Type": "PublicRelease"
 }

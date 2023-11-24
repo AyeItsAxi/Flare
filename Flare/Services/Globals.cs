@@ -15,7 +15,6 @@ global using System.Diagnostics;
 global using System.Windows.Input;
 global using Newtonsoft.Json.Linq;
 global using Discord.Interactions;
-global using Discord.Interactions;
 global using System.Threading.Tasks;
 global using System.Collections.Generic;
 global using System.Windows.Media.Animation;
