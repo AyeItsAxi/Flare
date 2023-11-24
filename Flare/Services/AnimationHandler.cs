@@ -1,6 +1,6 @@
 namespace Flare.Services;
 
-public class AnimationHandler
+public static class AnimationHandler
 {
         /// <summary>
         /// Fades in an inputted XAML object

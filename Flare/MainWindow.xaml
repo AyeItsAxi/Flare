@@ -127,7 +127,9 @@
                 <Ellipse x:Name="BotStatusEllipse" HorizontalAlignment="Left" Height="18" Margin="62,73,0,0" Fill="#80848e" VerticalAlignment="Top" Width="18" Opacity="1"/>
             </Grid>
         </Border>
-        <ComboBox x:Name="ProfileSelect" MinWidth="450" MinHeight="30" HorizontalAlignment="Left" Height="40" Margin="130,337,0,0" VerticalAlignment="Top" Width="450" SelectedIndex="0" HorizontalContentAlignment="Left" SelectionChanged="StatusSelect_OnSelected">
+        <ui:TextBox x:Name="PrefixBox" PlaceholderText="f!" ClearButtonEnabled="False" MinWidth="35" MinHeight="35" MaxWidth="65" MaxHeight="35" HorizontalAlignment="Left" Height="35" Margin="80,337,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="35"/>
+        <ui:Button x:Name="SaveConfiguration" Content="Save" Height="37" Margin="600,337,0,0" VerticalAlignment="Top" Width="120" Click="OnConfigurationSave"/>
+        <ComboBox x:Name="ProfileSelect" MinWidth="450" MinHeight="30" HorizontalAlignment="Left" Height="40" Margin="130,337,0,0" VerticalAlignment="Top" Width="450" SelectedIndex="0" HorizontalContentAlignment="Left" SelectionChanged="OnProfileSelectionChanged">
             <TextBlock Name="Profile1Select" Text="Profile 1 - None"/>
             <TextBlock Name="Profile2Select" Text="Profile 2 - None"/>
             <TextBlock Name="Profile3Select" Text="Profile 3 - None"/>
@@ -136,7 +138,5 @@
             <Border Name="ApplicationCover" BorderBrush="Black" BorderThickness="1" Opacity="0.8" HorizontalAlignment="Center" Height="436" VerticalAlignment="Center" Width="800" Background="Black"/>
             <Image Name="ApplicationLoader" gif:AnimationBehavior.SourceUri="/Lib/Graphics/Loader.gif" Margin="381,193,371,193" />
         </Grid>
-        <ui:TextBox x:Name="prefixBox" PlaceholderText="f!" MinWidth="35" MinHeight="35" MaxWidth="65" MaxHeight="35" HorizontalAlignment="Left" Height="35" Margin="80,337,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="35"/>
-        <ui:Button x:Name="saveConfiguration" Content="Save" Height="37" Margin="600,337,0,0" VerticalAlignment="Top" Width="120" Click="OnConfigurationSave"/>
     </Grid>
 </ui:UiWindow>

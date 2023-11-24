@@ -5,15 +5,15 @@ public static class HelpCommand
     public static async Task RunCommandLogic(SocketMessage message)
     {
         ECommandEnum? requestedCommand = null;
-        MessageBox.Show(message.Content.Split(' ')[1]);
         if (message.Content.Length > 7) requestedCommand = InteractionHandler.CommandHandler.InterpretCommand(message.Content.Split(' ')[1]);
         
+        var aliasJson = JsonConvert.DeserializeObject<CommandAliases>(Aliases)!;
         Embed helpEmbed;
         var builder = new StringBuilder();
         switch (requestedCommand)
         {
             case ECommandEnum.Adios:
-                var adiosArray = json.CommandAliases.Adios;
+                var adiosArray = aliasJson.Adios;
                 foreach (var item in adiosArray)
                 {
                     builder.AppendLine(item);
@@ -27,7 +27,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Avatar:
-                var avatarArray = json.CommandAliases.Avatar;
+                var avatarArray = aliasJson.Avatar;
                 foreach (var item in avatarArray)
                 {
                     builder.AppendLine(item);
@@ -40,7 +40,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Ban:
-                var banArray = json.CommandAliases.Ban;
+                var banArray = aliasJson.Ban;
                 foreach (var item in banArray)
                 {
                     builder.AppendLine(item);
@@ -53,7 +53,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Biden:
-                var bidenArray = json.CommandAliases.Biden;
+                var bidenArray = aliasJson.Biden;
                 foreach (var item in bidenArray)
                 {
                     builder.AppendLine(item);
@@ -67,7 +67,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.CarReverse:
-                var carReverseArray = json.CommandAliases.CarReverse;
+                var carReverseArray = aliasJson.CarReverse;
                 foreach (var item in carReverseArray)
                 {
                     builder.AppendLine(item);
@@ -81,7 +81,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Cat:
-                var catArray = json.CommandAliases.Cat;
+                var catArray = aliasJson.Cat;
                 foreach (var item in catArray)
                 {
                     builder.AppendLine(item);
@@ -94,7 +94,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Dog:
-                var dogArray = json.CommandAliases.Dog;
+                var dogArray = aliasJson.Dog;
                 foreach (var item in dogArray)
                 {
                     builder.AppendLine(item);
@@ -107,7 +107,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Drip:
-                var dripArray = json.CommandAliases.Drip;
+                var dripArray = aliasJson.Drip;
                 foreach (var item in dripArray)
                 {
                     builder.AppendLine(item);
@@ -121,7 +121,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Github:
-                var githubArray = json.CommandAliases.Github;
+                var githubArray = aliasJson.Github;
                 foreach (var item in githubArray)
                 {
                     builder.AppendLine(item);
@@ -134,7 +134,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Grave:
-                var graveArray = json.CommandAliases.Grave;
+                var graveArray = aliasJson.Grave;
                 foreach (var item in graveArray)
                 {
                     builder.AppendLine(item);
@@ -148,7 +148,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Heaven:
-                var heavenArray = json.CommandAliases.Heaven;
+                var heavenArray = aliasJson.Heaven;
                 foreach (var item in heavenArray)
                 {
                     builder.AppendLine(item);
@@ -162,7 +162,7 @@ public static class HelpCommand
                 break;
             
             case ECommandEnum.Help:
-                var helpArray = json.CommandAliases.Help;
+                var helpArray = aliasJson.Help;
                 foreach (var item in helpArray)
                 {
                     builder.AppendLine(item);
@@ -175,7 +175,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Kick:
-                var kickArray = json.CommandAliases.Kick;
+                var kickArray = aliasJson.Kick;
                 foreach (var item in kickArray)
                 {
                     builder.AppendLine(item);
@@ -188,7 +188,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Lyrics:
-                var lyricsArray = json.CommandAliases.Lyrics;
+                var lyricsArray = aliasJson.Lyrics;
                 foreach (var item in lyricsArray)
                 {
                     builder.AppendLine(item);
@@ -201,7 +201,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Mute:
-                var muteArray = json.CommandAliases.Mute;
+                var muteArray = aliasJson.Mute;
                 foreach (var item in muteArray)
                 {
                     builder.AppendLine(item);
@@ -214,7 +214,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Ping:
-                var pingArray = json.CommandAliases.Ping;
+                var pingArray = aliasJson.Ping;
                 foreach (var item in pingArray)
                 {
                     builder.AppendLine(item);
@@ -227,7 +227,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Purge:
-                var purgeArray = json.CommandAliases.Purge;
+                var purgeArray = aliasJson.Purge;
                 foreach (var item in purgeArray)
                 {
                     builder.AppendLine(item);
@@ -240,7 +240,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.SadCat:
-                var sadCatArray = json.CommandAliases.SadCat;
+                var sadCatArray = aliasJson.SadCat;
                 foreach (var item in sadCatArray)
                 {
                     builder.AppendLine(item);
@@ -254,7 +254,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Softban:
-                var softbanArray = json.CommandAliases.Softban;
+                var softbanArray = aliasJson.Softban;
                 foreach (var item in softbanArray)
                 {
                     builder.AppendLine(item);
@@ -267,7 +267,7 @@ public static class HelpCommand
                 break;
             
             case ECommandEnum.Stats:
-                var statsArray = json.CommandAliases.Stats;
+                var statsArray = aliasJson.Stats;
                 foreach (var item in statsArray)
                 {
                     builder.AppendLine(item);
@@ -280,7 +280,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Unban:
-                var unbanArray = json.CommandAliases.Unban;
+                var unbanArray = aliasJson.Unban;
                 foreach (var item in unbanArray)
                 {
                     builder.AppendLine(item);
@@ -293,7 +293,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Unmute:
-                var unmuteArray = json.CommandAliases.Unmute;
+                var unmuteArray = aliasJson.Unmute;
                 foreach (var item in unmuteArray)
                 {
                     builder.AppendLine(item);
@@ -306,7 +306,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Water:
-                var waterArray = json.CommandAliases.Water;
+                var waterArray = aliasJson.Water;
                 foreach (var item in waterArray)
                 {
                     builder.AppendLine(item);
@@ -320,7 +320,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Wide:
-                var wideArray = json.CommandAliases.Wide;
+                var wideArray = aliasJson.Wide;
                 foreach (var item in wideArray)
                 {
                     builder.AppendLine(item);
@@ -334,7 +334,7 @@ public static class HelpCommand
                 break;
                     
             case ECommandEnum.Wolverine:
-                var wolverineArray = json.CommandAliases.Wolverine;
+                var wolverineArray = aliasJson.Wolverine;
                 foreach (var item in wolverineArray)
                 {
                     builder.AppendLine(item);
@@ -357,7 +357,7 @@ public static class HelpCommand
                 break;
             
             case ECommandEnum.Lockdown:
-                var lockdownArray = json.CommandAliases.Lockdown;
+                var lockdownArray = aliasJson.Lockdown;
                 foreach (var item in lockdownArray)
                 {
                     builder.AppendLine(item);
@@ -370,7 +370,7 @@ public static class HelpCommand
                 break;
             
             case ECommandEnum.ServerConfiguration_SetAutoModLinkFilter:
-                var serverConfigurationSetAutoModLinkFilterArray = json.CommandAliases.ServerConfiguration_SetAutoModLinkFilter;
+                var serverConfigurationSetAutoModLinkFilterArray = aliasJson.ServerConfiguration_SetAutoModLinkFilter;
                 foreach (var item in serverConfigurationSetAutoModLinkFilterArray)
                 {
                     builder.AppendLine(item);

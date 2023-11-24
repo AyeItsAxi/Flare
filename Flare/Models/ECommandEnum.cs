@@ -21,6 +21,7 @@ public enum ECommandEnum
     Ping,
     Purge,
     SadCat,
+    // ReSharper disable once InconsistentNaming
     ServerConfiguration_SetAutoModLinkFilter,
     Softban,
     Stats,

@@ -10,7 +10,7 @@ public partial class FTSWindow
         flareBuildInfo.Content = $"Version: {FlareBuildVersion!.Split(";special")[0]}\r\nStarted at: {DateTime.Now}";
     }
 
-    private void hyperlink_Click(object sender, RoutedEventArgs e) => Process.Start(new ProcessStartInfo("cmd", $"/c start https://www.youtube.com/watch?v=aI4OmIbkJH8") { CreateNoWindow = true });
+    private void hyperlink_Click(object sender, RoutedEventArgs e) => Process.Start(new ProcessStartInfo("cmd", "/c start https://www.youtube.com/watch?v=aI4OmIbkJH8") { CreateNoWindow = true });
 
     private async void SaveButton_OnClick(object sender, RoutedEventArgs e)
     {
@@ -21,8 +21,9 @@ public partial class FTSWindow
             AnimationHandler.FadeOut(invalidToken, 0.2);
             return;
         }
-        json.BotToken = TokenBox.Password;
-        await File.WriteAllTextAsync("App/BotConfiguration.flare", JsonConvert.SerializeObject(json, Formatting.Indented));
+        SelectedProfileData.BotToken = TokenBox.Password;
+        Variables.ProfileConfiguration.Profile1 = SelectedProfileData;
+        await File.WriteAllTextAsync("App/ProfileConfiguration.flare", JsonConvert.SerializeObject(Variables.ProfileConfiguration, Formatting.Indented));
         Close();
     }
 

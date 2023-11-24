@@ -8,8 +8,8 @@ public static class InteractionHandler
         {
             try
             {
-                var commandAliases = json.CommandAliases;
-                foreach (var property in commandAliases.GetType().GetProperties())
+                var commandAliases = JsonConvert.DeserializeObject<TargetMe>(Aliases)!.CommandAliases;
+                foreach (var property in commandAliases!.GetType().GetProperties())
                 {
                     var aliases = (List<string>)property.GetValue(commandAliases)!;
                     if (aliases.Any(alias => alias == message.ToLower().Split('!')[1].Split(' ')[0]))
@@ -22,8 +22,8 @@ public static class InteractionHandler
             }
             catch (IndexOutOfRangeException)
             {
-                var commandAliases = json.CommandAliases;
-                foreach (var property in commandAliases.GetType().GetProperties())
+                var commandAliases = JsonConvert.DeserializeObject<TargetMe>(Aliases)!.CommandAliases;
+                foreach (var property in commandAliases!.GetType().GetProperties())
                 {
                     var aliases = (List<string>)property.GetValue(commandAliases)!;
                     if (aliases.Any(alias => alias == message.ToLower()))
@@ -325,7 +325,7 @@ public static class InteractionHandler
             var passesLinkPrefilter = true;
             if (JsonConvert.DeserializeObject<GuildConfiguration>(await File.ReadAllTextAsync($"App/Guilds/{((SocketGuildChannel)message.Channel).Guild.Id.ToString()}/GuildConfiguration.flare"))!.AutoModLinkFilter == true) passesLinkPrefilter = !await CommandLogic.Moderation.Guild.AutoModLinkFilter.RunModLogic(message);
             //  ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ like ???? youre literally delusional
-            if (passesLinkPrefilter && message.Content.StartsWith(json.BotPrefix ?? "f!")) await HandleCommandReceive(message, message.Content[2..]);
+            if (passesLinkPrefilter && message.Content.StartsWith(SelectedProfileData.BotPrefix!)) await HandleCommandReceive(message, message.Content[2..]);
             //scuffed but works so yeah
         }
     }
